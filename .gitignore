@@ -1,7 +1,6 @@
 node_modules/
 .env
 workdir/state.db
-workdir/media/
 test-output.png
 workdir/cron.log
 docs/site/

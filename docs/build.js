@@ -4,7 +4,7 @@
  * Run: node docs/build.js
  */
 
-import { readFileSync, writeFileSync, mkdirSync, readdirSync, existsSync } from 'fs';
+import { readFileSync, writeFileSync, mkdirSync, readdirSync, existsSync, cpSync } from 'fs';
 import { fileURLToPath } from 'url';
 import path from 'path';
 
@@ -115,6 +115,17 @@ function parseLog(logMd) {
   }).filter(e => e.body).reverse();
 }
 
+// Convert an absolute media path (from the agent) to a path relative to workdir/media/
+function mediaRelPath(absolutePath) {
+  if (!absolutePath) return null;
+  const marker = path.join('workdir', 'media') + path.sep;
+  const idx = absolutePath.indexOf(marker);
+  if (idx !== -1) return absolutePath.slice(idx + marker.length);
+  // fallback: try splitting on /workdir/media/
+  const m = absolutePath.match(/workdir[/\\]media[/\\](.+)/);
+  return m ? m[1] : null;
+}
+
 function readDrafts() {
   const draftsDir = path.join(workdir, 'drafts');
   if (!existsSync(draftsDir)) return [];
@@ -127,8 +138,21 @@ function readDrafts() {
       const ts = dateMatch ? `${dateMatch[1]} ${dateMatch[2]}:${dateMatch[3]}:${dateMatch[4]} UTC` : f.replace('.md','');
       const body = raw.replace(/^# Draft.*\n/, '').replace(/\*\*Media:\*\*.*\n?/, '').trim();
       const mediaMatch = raw.match(/\*\*Media:\*\* (.+)/);
-      return { filename: f, ts, body, mediaPath: mediaMatch ? mediaMatch[1] : null, isDraft: true };
+      const relPath = mediaMatch ? mediaRelPath(mediaMatch[1].trim()) : null;
+      return { filename: f, ts, body, mediaRelPath: relPath, isDraft: true };
     });
+}
+
+// Copy workdir/media/ tree into docs/site/media/ so images are served by Pages
+function copyMedia() {
+  const src = path.join(workdir, 'media');
+  const dest = path.join(outDir, 'media');
+  if (!existsSync(src)) return;
+  try {
+    cpSync(src, dest, { recursive: true });
+  } catch (e) {
+    console.warn('  media copy warning:', e.message);
+  }
 }
 
 // ── Shared CSS ────────────────────────────────────────────────────────────────
@@ -225,6 +249,8 @@ nav {
 .badge-sport { background: rgba(249,115,22,0.08); color: var(--orange); border: 1px solid rgba(249,115,22,0.15); }
 .post-body { font-size: 15px; color: var(--text2); white-space: pre-wrap; line-height: 1.65; }
 .post-body strong { color: var(--text); }
+.post-image { margin-top: 16px; border-radius: 8px; overflow: hidden; border: 1px solid var(--border); }
+.post-image img { display: block; width: 100%; height: auto; }
 .post-link { margin-top: 12px; }
 .post-link a { font-family: var(--mono); font-size: 12px; }
 
@@ -362,6 +388,7 @@ function buildPosts({ drafts, buildTime }) {
         ${p.sport ? `<span class="badge badge-sport">${escHtml(p.sport)}</span>` : ''}
       </div>
       <div class="post-body">${escHtml(p.body)}</div>
+      ${p.mediaRelPath ? `<div class="post-image"><img src="./media/${escHtml(p.mediaRelPath)}" alt="post visual" loading="lazy"></div>` : ''}
       ${p.xPostId ? `<div class="post-link"><a href="https://x.com/garbagetimebot/status/${escHtml(p.xPostId)}" target="_blank" rel="noopener">↗ View on X</a></div>` : ''}
     </div>`).join('');
 
@@ -413,6 +440,7 @@ writeFileSync(path.join(outDir, 'style.css'), CSS, 'utf8');
 writeFileSync(path.join(outDir, 'index.html'), buildAbout({ identity, voice, strategy, buildTime }), 'utf8');
 writeFileSync(path.join(outDir, 'posts.html'), buildPosts({ drafts, buildTime }), 'utf8');
 writeFileSync(path.join(outDir, 'notes.html'), buildNotes({ logEntries, buildTime }), 'utf8');
+copyMedia();
 
 console.log(`Built to docs/site/`);
 console.log(`  identity: ${identity.trim() ? 'yes' : 'empty'}`);
