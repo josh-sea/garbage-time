@@ -690,8 +690,6 @@ const html = buildSite({ identity, voice, strategy, logEntries, drafts, buildTim
 const outPath = path.join(outDir, 'index.html');
 writeFileSync(outPath, html, 'utf8');
 
-// CNAME tells GitHub Pages which custom domain to serve from
-writeFileSync(path.join(outDir, 'CNAME'), 'garbage-time.joshcocciardi.com', 'utf8');
 
 console.log(`Built: ${path.relative(repoRoot, outPath)}`);
 console.log(`  identity: ${identity.trim() ? 'yes' : 'empty'}`);
