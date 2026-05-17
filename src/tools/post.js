@@ -6,7 +6,7 @@ import { recordPost, getRecentPosts } from './budget.js';
 const repoRoot = path.resolve(fileURLToPath(import.meta.url), '../../..');
 const draftsDir = path.join(repoRoot, 'workdir', 'drafts');
 
-export async function postToX(content, mediaPath) {
+export async function postToX(content, mediaPath, final = false) {
   const dryRun = process.env.DRY_RUN !== 'false';
 
   if (content.length > 280) {
@@ -17,10 +17,11 @@ export async function postToX(content, mediaPath) {
     if (!existsSync(draftsDir)) mkdirSync(draftsDir, { recursive: true });
 
     const ts = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
-    const filename = `${ts}.md`;
+    const status = final ? 'final' : 'wip';
+    const filename = `${ts}-${status}.md`;
     const draftPath = path.join(draftsDir, filename);
 
-    let draftContent = `# Draft — ${new Date().toISOString()}\n\n${content}\n`;
+    let draftContent = `# Draft — ${new Date().toISOString()}\nstatus: ${status}\n\n${content}\n`;
     if (mediaPath) draftContent += `\n**Media:** ${mediaPath}\n`;
 
     writeFileSync(draftPath, draftContent, 'utf8');
@@ -35,8 +36,9 @@ export async function postToX(content, mediaPath) {
     return {
       success: true,
       draft: true,
+      final,
       path: draftPath,
-      message: `Draft saved to ${filename}`,
+      message: `${final ? 'Final draft' : 'Working draft'} saved to ${filename}`,
     };
   }
 

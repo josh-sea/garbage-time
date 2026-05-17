@@ -122,12 +122,13 @@ const TOOL_DEFINITIONS = [
   },
   {
     name: 'post_to_x',
-    description: 'Post content to X (or save as draft if DRY_RUN=true). Content must be ≤280 characters. Optionally attach a media file path.',
+    description: 'Post content to X (or save as draft if DRY_RUN=true). Content must be ≤280 characters. Use final=true only for the polished, publish-ready version. Working iterations should use final=false (default) — they are kept in the repo but not shown on the public site.',
     input_schema: {
       type: 'object',
       properties: {
         content: { type: 'string', description: 'Tweet text, ≤280 characters' },
         media_path: { type: 'string', description: 'Path to a PNG file to attach (optional)' },
+        final: { type: 'boolean', description: 'true = publish-ready final draft shown on site. false = working iteration kept in repo only. Default false. Mark only one post per shift as final.' },
       },
       required: ['content'],
     },
@@ -180,7 +181,7 @@ async function dispatchTool(name, input) {
     case 'check_budget':
       return checkBudget();
     case 'post_to_x':
-      return postToX(input.content, input.media_path);
+      return postToX(input.content, input.media_path, input.final ?? false);
     case 'read_x_engagement':
       return readXEngagement();
     case 'set_next_wake':

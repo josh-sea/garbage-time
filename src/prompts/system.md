@@ -56,7 +56,7 @@ You have 11 tools:
 - **write_journal(file, content)** — replace identity.md, voice.md, or strategy.md.
 - **append_journal(content)** — append a timestamped entry to log.md.
 - **check_budget()** — see posts remaining today and API budget status.
-- **post_to_x(content, media_path?)** — post to X, or save as draft if DRY_RUN=true.
+- **post_to_x(content, media_path?, final?)** — post to X, or save as draft if DRY_RUN=true. Use `final=true` only on the polished, publish-ready version. You can call this multiple times to iterate on copy — earlier calls with `final=false` are kept in the repo as working history but are not shown on the public site. Only one post per shift should be marked `final=true`.
 - **read_x_engagement()** — engagement on recent posts.
 - **set_next_wake(iso_datetime)** — set when to run next. **Required at the end of every shift.**
 

@@ -136,10 +136,12 @@ function readDrafts() {
       const raw = readFileSync(path.join(draftsDir, f), 'utf8');
       const dateMatch = f.match(/^(\d{4}-\d{2}-\d{2})T(\d{2})-(\d{2})-(\d{2})/);
       const ts = dateMatch ? `${dateMatch[1]} ${dateMatch[2]}:${dateMatch[3]}:${dateMatch[4]} UTC` : f.replace('.md','');
-      const body = raw.replace(/^# Draft.*\n/, '').replace(/\*\*Media:\*\*.*\n?/, '').trim();
+      const statusMatch = raw.match(/^status: (\w+)/m);
+      const status = statusMatch ? statusMatch[1] : 'wip'; // files without status header are working drafts
+      const body = raw.replace(/^# Draft.*\n/, '').replace(/^status:.*\n/, '').replace(/\*\*Media:\*\*.*\n?/, '').trim();
       const mediaMatch = raw.match(/\*\*Media:\*\* (.+)/);
       const relPath = mediaMatch ? mediaRelPath(mediaMatch[1].trim()) : null;
-      return { filename: f, ts, body, mediaRelPath: relPath, isDraft: true };
+      return { filename: f, ts, body, mediaRelPath: relPath, isDraft: true, status };
     });
 }
 
@@ -377,10 +379,12 @@ function buildAbout({ identity, voice, strategy, buildTime }) {
 
 function buildPosts({ drafts, buildTime }) {
   const all = [...drafts].sort((a, b) => b.ts.localeCompare(a.ts));
+  const visible = all.filter(p => !p.isDraft || p.status === 'final' || !p.isDraft);
+  const wipCount = all.filter(p => p.isDraft && p.status === 'wip').length;
 
-  const cards = all.length === 0
+  const cards = visible.length === 0
     ? '<div class="empty-block">No posts yet. The agent drafts here until X API goes live.</div>'
-    : all.map(p => `
+    : visible.map(p => `
     <div class="post-card">
       <div class="post-meta">
         <span class="post-ts">${escHtml(p.ts)}</span>
@@ -393,12 +397,12 @@ function buildPosts({ drafts, buildTime }) {
     </div>`).join('');
 
   const liveCount = all.filter(p => !p.isDraft).length;
-  const draftCount = all.filter(p => p.isDraft).length;
+  const finalDraftCount = all.filter(p => p.isDraft && p.status === 'final').length;
 
   const content = `
   <div class="page-header">
     <h1>Posts</h1>
-    <p>${liveCount} live · ${draftCount} draft · newest first</p>
+    <p>${liveCount} live · ${finalDraftCount} final draft${finalDraftCount !== 1 ? 's' : ''}${wipCount > 0 ? ` · <a href="https://github.com/josh-sea/garbage-time/tree/claude/garbage-time-agent-0a3Tg/workdir/drafts" target="_blank" rel="noopener">${wipCount} working draft${wipCount !== 1 ? 's' : ''} in repo</a>` : ''} · newest first</p>
   </div>
   ${cards}`;
 
