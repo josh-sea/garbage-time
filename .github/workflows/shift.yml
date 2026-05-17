@@ -5,7 +5,7 @@ on:
   schedule:
     - cron: "*/30 * * * *"
 
-  # Manual trigger from GitHub UI — always runs the shift regardless of wake time
+  # Manual trigger from GitHub UI — always runs regardless of wake time
   workflow_dispatch:
     inputs:
       force:
@@ -14,7 +14,10 @@ on:
         default: true
 
 permissions:
-  contents: write  # needed to push workdir changes back
+  contents: write
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   shift:
@@ -22,11 +25,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          # Always check out the working branch, not just the default branch
           ref: claude/garbage-time-agent-0a3Tg
-          # Use a PAT if you need to push to a protected branch; GITHUB_TOKEN
-          # works for normal branches
           token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check for API key
+        run: |
+          if [ -z "${{ secrets.ANTHROPIC_API_KEY }}" ]; then
+            echo "::notice::ANTHROPIC_API_KEY secret is not set. Add it under Settings > Secrets and variables > Actions, then re-run."
+            exit 0
+          fi
+          echo "API key present."
 
       - uses: actions/setup-node@v4
         with:
@@ -47,7 +55,7 @@ jobs:
           DAILY_API_BUDGET_USD: ${{ vars.DAILY_API_BUDGET_USD || '5' }}
         run: |
           if [ "${{ github.event.inputs.force }}" = "true" ] || [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            echo "Force run (workflow_dispatch or force=true)"
+            echo "Force run"
             npm run force-shift
           else
             echo "Scheduled run — checking wake time"
