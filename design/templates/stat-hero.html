@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1200">
+<title>Garbage Time — Stat Hero</title>
+<!-- base.css is injected automatically by the render tool -->
+<style>
+  body {
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-primary);
+  }
+
+  .main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px;
+    gap: 0;
+  }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    margin-bottom: 24px;
+  }
+
+  .big-number {
+    font-family: var(--font-mono);
+    font-size: 144px;
+    font-weight: 700;
+    color: var(--accent-orange);
+    line-height: 1;
+    letter-spacing: -4px;
+  }
+
+  .stat-name {
+    font-size: 20px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-weight: 500;
+    margin-top: 16px;
+  }
+
+  .divider-line {
+    width: 48px;
+    height: 2px;
+    background: var(--accent-orange);
+    opacity: 0.4;
+    margin: 24px 0;
+  }
+
+  .context-block {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .context-primary {
+    font-size: 15px;
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  .context-secondary {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+
+  .comparison-note {
+    margin-top: 24px;
+    padding: 12px 24px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--text-secondary);
+    text-align: center;
+  }
+
+  .comparison-note .highlight {
+    color: var(--accent-cyan);
+  }
+</style>
+</head>
+<body>
+  <div class="main">
+    <div class="eyebrow">Miami Heat · Q4 Blowout Watch</div>
+
+    <div class="big-number">31</div>
+    <div class="stat-name">Bench Points</div>
+
+    <div class="divider-line"></div>
+
+    <div class="context-block">
+      <div class="context-primary">Heat bench outscored the Celtics starters</div>
+      <div class="context-secondary">Q4 · Game already decided · 22-point deficit erased to 14</div>
+    </div>
+
+    <div class="comparison-note">
+      Starters in same quarter: <span class="highlight">8 pts · 6 TO · -18</span>
+    </div>
+  </div>
+
+  <div class="footer-bar">
+    <span class="handle">@garbagetime</span>
+    <span class="dot">·</span>
+    <span>NBA</span>
+    <span class="dot">·</span>
+    <span>data: ESPN</span>
+    <span class="dot">·</span>
+    <span>2025-01-15</span>
+  </div>
+</body>
+</html>

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1200">
+<title>Garbage Time — Comparison</title>
+<!-- base.css is injected automatically by the render tool -->
+<style>
+  body {
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-primary);
+  }
+
+  .header {
+    padding: 28px 40px 20px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  .title-block {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+  }
+
+  .title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .subtitle {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+
+  .tag-block {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  /* Comparison grid */
+  .grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .col {
+    display: flex;
+    flex-direction: column;
+    padding: 28px 40px;
+    gap: 0;
+  }
+
+  .col + .col {
+    border-left: 1px solid var(--border);
+  }
+
+  .col-header {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-primary);
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--border);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .col-header .win-label {
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    background: var(--accent-orange-dim);
+    color: var(--accent-orange);
+    border: 1px solid var(--border-accent);
+    letter-spacing: 0.1em;
+  }
+
+  .row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    gap: 12px;
+  }
+
+  .row:last-child {
+    border-bottom: none;
+  }
+
+  .row-label {
+    font-size: 13px;
+    color: var(--text-secondary);
+    flex: 1;
+  }
+
+  .row-value {
+    font-family: var(--font-mono);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .row-value.win {
+    color: var(--accent-orange);
+  }
+
+  .row-value.lose {
+    color: var(--text-dim);
+  }
+
+  .row-note {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    min-width: 60px;
+    text-align: right;
+  }
+</style>
+</head>
+<body>
+  <div class="header">
+    <div class="title-block">
+      <div class="eyebrow">NBA · Garbage Time Analysis</div>
+      <div class="title">Starters vs. Bench · Q4</div>
+      <div class="subtitle">LAL @ BOS · Jan 15 2025 · Final: 118-101</div>
+    </div>
+    <div class="tag-block">
+      <div class="tag">Blowout</div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <!-- Left column: Starters -->
+    <div class="col">
+      <div class="col-header">
+        Starters
+        <!-- no win label here since bench won this quarter -->
+      </div>
+
+      <div class="row">
+        <div class="row-label">Points</div>
+        <div class="row-value lose">14</div>
+        <div class="row-note">Q4 only</div>
+      </div>
+      <div class="row">
+        <div class="row-label">Assists</div>
+        <div class="row-value lose">3</div>
+        <div class="row-note"></div>
+      </div>
+      <div class="row">
+        <div class="row-label">Turnovers</div>
+        <div class="row-value lose">7</div>
+        <div class="row-note">↑ bad</div>
+      </div>
+      <div class="row">
+        <div class="row-label">FG%</div>
+        <div class="row-value lose">28%</div>
+        <div class="row-note">7-25</div>
+      </div>
+      <div class="row">
+        <div class="row-label">Minutes</div>
+        <div class="row-value lose">52</div>
+        <div class="row-note"></div>
+      </div>
+      <div class="row">
+        <div class="row-label">+/−</div>
+        <div class="row-value lose">−18</div>
+        <div class="row-note"></div>
+      </div>
+    </div>
+
+    <!-- Right column: Bench -->
+    <div class="col">
+      <div class="col-header">
+        Bench
+        <span class="win-label">WON Q4</span>
+      </div>
+
+      <div class="row">
+        <div class="row-label">Points</div>
+        <div class="row-value win">31</div>
+        <div class="row-note">Q4 only</div>
+      </div>
+      <div class="row">
+        <div class="row-label">Assists</div>
+        <div class="row-value win">9</div>
+        <div class="row-note"></div>
+      </div>
+      <div class="row">
+        <div class="row-label">Turnovers</div>
+        <div class="row-value win">1</div>
+        <div class="row-note">↓ good</div>
+      </div>
+      <div class="row">
+        <div class="row-label">FG%</div>
+        <div class="row-value win">61%</div>
+        <div class="row-note">11-18</div>
+      </div>
+      <div class="row">
+        <div class="row-label">Minutes</div>
+        <div class="row-value win">68</div>
+        <div class="row-note"></div>
+      </div>
+      <div class="row">
+        <div class="row-label">+/−</div>
+        <div class="row-value win">+12</div>
+        <div class="row-note"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bar">
+    <span class="handle">@garbagetime</span>
+    <span class="dot">·</span>
+    <span>NBA</span>
+    <span class="dot">·</span>
+    <span>data: ESPN</span>
+    <span class="dot">·</span>
+    <span>2025-01-15</span>
+  </div>
+</body>
+</html>
