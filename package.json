@@ -17,6 +17,7 @@
   "dependencies": {
     "@anthropic-ai/sdk": "^0.30.0",
     "better-sqlite3": "^9.6.0",
-    "playwright": "^1.45.0"
+    "playwright": "^1.45.0",
+    "twitter-api-v2": "^1.29.0"
   }
 }

@@ -60,7 +60,11 @@ jobs:
         if: steps.check-key.outputs.has_key == 'true'
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          DRY_RUN: ${{ vars.DRY_RUN || 'true' }}
+          X_API_KEY: ${{ secrets.X_API_KEY }}
+          X_API_SECRET: ${{ secrets.X_API_SECRET }}
+          X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
+          X_ACCESS_SECRET: ${{ secrets.X_ACCESS_SECRET }}
+          DRY_RUN: ${{ vars.DRY_RUN || 'false' }}
           DAILY_POST_CAP: ${{ vars.DAILY_POST_CAP || '6' }}
           DAILY_API_BUDGET_USD: ${{ vars.DAILY_API_BUDGET_USD || '5' }}
         run: |

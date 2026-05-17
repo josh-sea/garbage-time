@@ -1,6 +1,7 @@
-import { writeFileSync, mkdirSync, existsSync } from 'fs';
+import { writeFileSync, readFileSync, mkdirSync, existsSync } from 'fs';
 import { fileURLToPath } from 'url';
 import path from 'path';
+import { TwitterApi } from 'twitter-api-v2';
 import { recordPost, getRecentPosts } from './budget.js';
 
 const repoRoot = path.resolve(fileURLToPath(import.meta.url), '../../..');
@@ -42,16 +43,48 @@ export async function postToX(content, mediaPath, final = false) {
     };
   }
 
-  // TODO: implement X API call with OAuth 1.0a
-  // Recommended package: twitter-api-v2
-  // Steps:
-  //   1. For text-only: POST https://api.twitter.com/2/tweets with { text: content }
-  //   2. For media: first upload via POST https://upload.twitter.com/1.1/media/upload.json
-  //      then include media_ids in the tweet payload
-  //   3. Use X_API_KEY, X_API_SECRET, X_ACCESS_TOKEN, X_ACCESS_SECRET from process.env
-  throw new Error(
-    'X API not yet implemented. Set DRY_RUN=true or implement OAuth 1.0a in src/tools/post.js'
-  );
+  const { X_API_KEY, X_API_SECRET, X_ACCESS_TOKEN, X_ACCESS_SECRET } = process.env;
+  if (!X_API_KEY || !X_API_SECRET || !X_ACCESS_TOKEN || !X_ACCESS_SECRET) {
+    throw new Error('Missing X API credentials. Set X_API_KEY, X_API_SECRET, X_ACCESS_TOKEN, X_ACCESS_SECRET in env.');
+  }
+
+  const client = new TwitterApi({
+    appKey: X_API_KEY,
+    appSecret: X_API_SECRET,
+    accessToken: X_ACCESS_TOKEN,
+    accessSecret: X_ACCESS_SECRET,
+  });
+
+  let mediaIds = [];
+  if (mediaPath && existsSync(mediaPath)) {
+    const mediaData = readFileSync(mediaPath);
+    const mediaId = await client.v1.uploadMedia(mediaData, { mimeType: 'image/png' });
+    mediaIds = [mediaId];
+  }
+
+  const tweetPayload = { text: content };
+  if (mediaIds.length > 0) tweetPayload.media = { media_ids: mediaIds };
+
+  const tweet = await client.v2.tweet(tweetPayload);
+  const xPostId = tweet.data.id;
+
+  recordPost({
+    postedAt: new Date().toISOString(),
+    content,
+    mediaPath: mediaPath ?? null,
+    isDraft: false,
+    xPostId,
+  });
+
+  console.log(`[post] Posted to X: https://x.com/garbagetimebot/status/${xPostId}`);
+  return {
+    success: true,
+    draft: false,
+    final,
+    x_post_id: xPostId,
+    url: `https://x.com/garbagetimebot/status/${xPostId}`,
+    message: `Posted to X: ${xPostId}`,
+  };
 }
 
 export async function readXEngagement() {
