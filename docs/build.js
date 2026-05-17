@@ -115,13 +115,11 @@ function parseLog(logMd) {
   }).filter(e => e.body).reverse();
 }
 
-// Convert an absolute media path (from the agent) to a path relative to workdir/media/
 function mediaRelPath(absolutePath) {
   if (!absolutePath) return null;
   const marker = path.join('workdir', 'media') + path.sep;
   const idx = absolutePath.indexOf(marker);
   if (idx !== -1) return absolutePath.slice(idx + marker.length);
-  // fallback: try splitting on /workdir/media/
   const m = absolutePath.match(/workdir[/\\]media[/\\](.+)/);
   return m ? m[1] : null;
 }
@@ -137,7 +135,7 @@ function readDrafts() {
       const dateMatch = f.match(/^(\d{4}-\d{2}-\d{2})T(\d{2})-(\d{2})-(\d{2})/);
       const ts = dateMatch ? `${dateMatch[1]} ${dateMatch[2]}:${dateMatch[3]}:${dateMatch[4]} UTC` : f.replace('.md','');
       const statusMatch = raw.match(/^status: (\w+)/m);
-      const status = statusMatch ? statusMatch[1] : 'wip'; // files without status header are working drafts
+      const status = statusMatch ? statusMatch[1] : 'wip';
       const body = raw.replace(/^# Draft.*\n/, '').replace(/^status:.*\n/, '').replace(/\*\*Media:\*\*.*\n?/, '').trim();
       const mediaMatch = raw.match(/\*\*Media:\*\* (.+)/);
       const relPath = mediaMatch ? mediaRelPath(mediaMatch[1].trim()) : null;
@@ -145,7 +143,6 @@ function readDrafts() {
     });
 }
 
-// Copy workdir/media/ tree into docs/site/media/ so images are served by Pages
 function copyMedia() {
   const src = path.join(workdir, 'media');
   const dest = path.join(outDir, 'media');
@@ -157,139 +154,386 @@ function copyMedia() {
   }
 }
 
+// ── Identity extraction ───────────────────────────────────────────────────────
+
+function stripMd(s) {
+  return s.replace(/\*\*/g, '').replace(/\*/g, '').replace(/^>\s*/, '').trim();
+}
+
+function extractBio(md) {
+  const bioSection = md.match(/##\s*Bio[^\n]*\n([\s\S]+?)(?=\n##|\n#|$)/i);
+  if (bioSection) {
+    const line = bioSection[1].trim().split('\n')
+      .map(l => stripMd(l.trim()))
+      .find(l => l && !l.startsWith('(') && l.length > 10);
+    if (line) return line;
+  }
+  const fallback = md.split('\n').find(l => l.trim() && !l.startsWith('#'));
+  return fallback ? stripMd(fallback) : 'An autonomous AI sports observer. Watching what humans stop watching.';
+}
+
+function extractHandle(md) {
+  const m = md.match(/@[\w]+/);
+  return m ? m[0] : '@garbagetimebot';
+}
+
+function extractBeat(md) {
+  const m = md.match(/##\s*Default [Bb]eat[^\n]*\n([^\n]+)/i);
+  if (m) {
+    const raw = stripMd(m[1]).replace(/^[-*]\s*/, '');
+    const cut = raw.match(/^([^,.:·(]+)/);
+    return (cut ? cut[1] : raw).trim().slice(0, 24);
+  }
+  return 'NBA';
+}
+
 // ── Shared CSS ────────────────────────────────────────────────────────────────
 
 const CSS = `
 :root {
-  --bg: #0d0d0f;
-  --bg2: #18181b;
-  --bg3: #1c1c21;
-  --bg4: #232329;
-  --border: rgba(255,255,255,0.07);
+  --bg: #0d0d16;
+  --bg2: #121220;
+  --bg3: #1a1a2c;
+  --bg4: #222238;
+  --border: rgba(168,85,247,0.12);
+  --border2: rgba(255,255,255,0.05);
+  --fuchsia: #e879f9;
+  --fuchsia-dim: rgba(232,121,249,0.1);
   --orange: #f97316;
-  --cyan: #22d3ee;
-  --text: #f4f4f5;
-  --text2: #a1a1aa;
-  --text3: #52525b;
-  --mono: 'Courier New', monospace;
-  --sans: system-ui, -apple-system, sans-serif;
-  --max: 800px;
-  --nav-h: 52px;
+  --orange-dim: rgba(249,115,22,0.1);
+  --blue: #60a5fa;
+  --blue-dim: rgba(96,165,250,0.1);
+  --green: #4ade80;
+  --text: #e2e4f0;
+  --text2: #9294aa;
+  --text3: #52546a;
+  --mono: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+  --sans: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --max: 820px;
+  --nav-h: 56px;
+  --r: 10px;
+  --card-shadow: 0 2px 0 rgba(255,255,255,0.03) inset, 0 8px 32px rgba(0,0,0,0.45);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
-body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 16px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
-a { color: var(--orange); text-decoration: none; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--fuchsia); text-decoration: none; }
 a:hover { text-decoration: underline; }
 img { max-width: 100%; }
 
-/* Nav */
+/* ── Nav ─────────────────────────────────────── */
 nav {
   position: sticky; top: 0; z-index: 100;
-  background: rgba(13,13,15,0.94); backdrop-filter: blur(12px);
+  background: rgba(12,12,20,0.92);
+  backdrop-filter: blur(18px);
   border-bottom: 1px solid var(--border);
   height: var(--nav-h);
   display: flex; align-items: center; justify-content: space-between;
-  padding: 0 24px; gap: 16px;
+  padding: 0 28px; gap: 16px;
 }
-.nav-brand { font-family: var(--mono); font-size: 14px; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 8px; }
-.nav-brand .dot { color: var(--orange); }
-.nav-links { display: flex; gap: 4px; list-style: none; }
+.nav-brand {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  display: flex; align-items: center; gap: 10px;
+  text-decoration: none;
+}
+.nav-brand:hover { text-decoration: none; }
+.nav-icon {
+  width: 26px; height: 26px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, var(--fuchsia) 0%, #a855f7 60%, var(--blue) 100%);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 900; color: #fff;
+  flex-shrink: 0;
+  box-shadow: 0 2px 10px rgba(168,85,247,0.45), 0 1px 0 rgba(255,255,255,0.12) inset;
+}
+.nav-links { display: flex; gap: 2px; list-style: none; }
 .nav-links a {
-  font-size: 12px; font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.08em;
-  color: var(--text3); padding: 5px 10px; border-radius: 5px; transition: color 0.15s;
+  font-size: 12px;
+  font-family: var(--mono);
+  color: var(--text3);
+  padding: 5px 12px;
+  border-radius: 6px;
+  transition: color 0.15s, background 0.15s;
 }
-.nav-links a:hover { color: var(--text); text-decoration: none; }
-.nav-links a.active { color: var(--orange); background: rgba(249,115,22,0.08); }
-.nav-badge { font-size: 10px; font-family: var(--mono); padding: 2px 8px; border-radius: 4px; background: rgba(249,115,22,0.1); color: var(--orange); border: 1px solid rgba(249,115,22,0.2); letter-spacing: 0.05em; white-space: nowrap; flex-shrink: 0; }
+.nav-links a:hover { color: var(--text2); background: rgba(255,255,255,0.04); text-decoration: none; }
+.nav-links a.active { color: var(--fuchsia); background: var(--fuchsia-dim); }
+.nav-badge {
+  font-size: 10px;
+  font-family: var(--mono);
+  padding: 3px 10px;
+  border-radius: 5px;
+  background: var(--fuchsia-dim);
+  color: var(--fuchsia);
+  border: 1px solid rgba(232,121,249,0.2);
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
 
-/* Page layout */
+/* ── Page layout ─────────────────────────────── */
 .page { max-width: var(--max); margin: 0 auto; padding: 0 24px 80px; }
 
-/* Hero */
-.hero { padding: 64px 0 48px; border-bottom: 1px solid var(--border); margin-bottom: 52px; }
-.hero-eyebrow { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--text3); margin-bottom: 14px; }
-.hero-name { font-size: 44px; font-weight: 800; letter-spacing: -1.5px; line-height: 1.05; margin-bottom: 16px; }
-.hero-name span { color: var(--orange); }
-.hero-bio { font-size: 17px; color: var(--text2); max-width: 540px; line-height: 1.6; margin-bottom: 24px; }
-.hero-chips { display: flex; gap: 8px; flex-wrap: wrap; }
-.chip { font-family: var(--mono); font-size: 11px; color: var(--text3); background: var(--bg3); border: 1px solid var(--border); padding: 3px 9px; border-radius: 4px; }
+/* ── Profile card ────────────────────────────── */
+.profile-card {
+  display: flex;
+  gap: 28px;
+  align-items: flex-start;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 32px;
+  margin: 40px 0 36px;
+  box-shadow: var(--card-shadow);
+}
+.profile-avatar {
+  width: 72px; height: 72px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--fuchsia) 0%, #a855f7 50%, var(--blue) 100%);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono);
+  font-size: 20px;
+  font-weight: 900;
+  color: #fff;
+  flex-shrink: 0;
+  box-shadow: 0 4px 20px rgba(168,85,247,0.4), 0 1px 0 rgba(255,255,255,0.12) inset;
+  letter-spacing: -1px;
+}
+.profile-info { flex: 1; min-width: 0; }
+.profile-eyebrow {
+  font-family: var(--mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--fuchsia);
+  margin-bottom: 6px;
+  opacity: 0.85;
+}
+.profile-name {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: var(--text);
+  margin-bottom: 2px;
+  line-height: 1.1;
+}
+.profile-handle {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 12px;
+}
+.profile-bio {
+  font-size: 15px;
+  color: var(--text2);
+  line-height: 1.6;
+  margin-bottom: 16px;
+  max-width: 480px;
+}
+.profile-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text3);
+  background: var(--bg4);
+  border: 1px solid var(--border2);
+  padding: 3px 9px;
+  border-radius: 5px;
+  letter-spacing: 0.04em;
+}
+.chip-fuchsia { color: var(--fuchsia); background: var(--fuchsia-dim); border-color: rgba(232,121,249,0.2); }
+.chip-orange  { color: var(--orange);  background: var(--orange-dim);  border-color: rgba(249,115,22,0.2);  }
+.chip-blue    { color: var(--blue);    background: var(--blue-dim);    border-color: rgba(96,165,250,0.2);   }
 
-/* Section */
-.section { margin-bottom: 56px; }
-.section-label { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--orange); font-weight: 600; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
-.section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-.section-sub { font-family: var(--mono); font-size: 11px; color: var(--text3); }
+/* ── Tabs ────────────────────────────────────── */
+.tabs-container { margin-bottom: 56px; }
+.tab-bar {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 0;
+  gap: 0;
+}
+.tab-btn {
+  font-family: var(--mono);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text3);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 11px 20px;
+  cursor: pointer;
+  margin-bottom: -1px;
+  transition: color 0.15s, border-color 0.15s;
+}
+.tab-btn:hover { color: var(--text2); }
+.tab-btn.active { color: var(--fuchsia); border-bottom-color: var(--fuchsia); }
 
-/* Prose card */
-.prose { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 28px 32px; }
-.prose h1, .prose h2, .prose h3 { font-size: 13px; font-weight: 700; color: var(--orange); font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.1em; margin: 20px 0 8px; }
+.tab-panel {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 var(--r) var(--r);
+  padding: 28px 32px;
+  box-shadow: var(--card-shadow);
+}
+.tab-panel.hidden { display: none; }
+
+/* Prose shared styles (tabs + standalone .prose) */
+.tab-panel h1, .tab-panel h2, .tab-panel h3,
+.prose h1, .prose h2, .prose h3 {
+  font-size: 11px; font-weight: 700;
+  color: var(--fuchsia);
+  font-family: var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin: 24px 0 10px;
+}
+.tab-panel h1:first-child, .tab-panel h2:first-child, .tab-panel h3:first-child,
 .prose h1:first-child, .prose h2:first-child, .prose h3:first-child { margin-top: 0; }
-.prose p { color: var(--text2); margin-bottom: 10px; font-size: 15px; }
-.prose p:last-child { margin-bottom: 0; }
-.prose strong { color: var(--text); }
-.prose em { font-style: italic; }
-.prose code { font-family: var(--mono); font-size: 13px; background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; color: var(--cyan); }
-.prose pre { background: rgba(0,0,0,0.4); border: 1px solid var(--border); border-radius: 6px; padding: 16px; overflow-x: auto; margin: 12px 0; }
-.prose pre code { background: none; padding: 0; color: var(--text2); }
-.prose hr { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
-.prose ul, .prose ol { padding-left: 20px; margin: 8px 0; }
-.prose li { color: var(--text2); margin-bottom: 4px; font-size: 15px; }
-.prose blockquote { border-left: 3px solid var(--orange); padding: 4px 16px; margin: 12px 0; color: var(--text2); font-style: italic; background: rgba(249,115,22,0.04); border-radius: 0 6px 6px 0; }
-.prose a { color: var(--orange); }
+.tab-panel p, .prose p { color: var(--text2); margin-bottom: 10px; font-size: 15px; }
+.tab-panel p:last-child, .prose p:last-child { margin-bottom: 0; }
+.tab-panel strong, .prose strong { color: var(--text); }
+.tab-panel em, .prose em { font-style: italic; }
+.tab-panel code, .prose code {
+  font-family: var(--mono); font-size: 13px;
+  background: rgba(255,255,255,0.06); padding: 1px 6px; border-radius: 3px; color: var(--blue);
+}
+.tab-panel pre, .prose pre {
+  background: rgba(0,0,0,0.5); border: 1px solid var(--border2);
+  border-radius: 8px; padding: 16px; overflow-x: auto; margin: 14px 0;
+}
+.tab-panel pre code, .prose pre code { background: none; padding: 0; color: var(--text2); }
+.tab-panel hr, .prose hr { border: none; border-top: 1px solid var(--border2); margin: 20px 0; }
+.tab-panel ul, .tab-panel ol, .prose ul, .prose ol { padding-left: 20px; margin: 10px 0; }
+.tab-panel li, .prose li { color: var(--text2); margin-bottom: 6px; font-size: 15px; }
+.tab-panel blockquote, .prose blockquote {
+  border-left: 3px solid var(--fuchsia);
+  padding: 6px 16px; margin: 14px 0;
+  color: var(--text2); font-style: italic;
+  background: var(--fuchsia-dim); border-radius: 0 6px 6px 0;
+}
+.tab-panel a, .prose a { color: var(--fuchsia); }
 .empty-state { color: var(--text3); font-family: var(--mono); font-size: 13px; font-style: italic; }
 
-/* Post card */
-.post-card { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 24px; margin-bottom: 12px; }
+/* Standalone prose card */
+.section { margin-bottom: 52px; }
+.section-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--fuchsia);
+  font-weight: 600;
+  margin-bottom: 16px;
+  display: flex; align-items: center; gap: 10px;
+  opacity: 0.9;
+}
+.section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.section-sub { font-family: var(--mono); font-size: 10px; color: var(--text3); font-weight: 400; }
+.prose { background: var(--bg3); border: 1px solid var(--border); border-radius: var(--r); padding: 28px 32px; box-shadow: var(--card-shadow); }
+
+/* ── Page header (Posts / Notes) ─────────────── */
+.page-header { padding: 44px 0 32px; border-bottom: 1px solid var(--border); margin-bottom: 36px; }
+.page-header h1 { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 6px; }
+.page-header p { font-size: 13px; color: var(--text3); font-family: var(--mono); }
+.page-header p a { color: var(--text3); }
+.page-header p a:hover { color: var(--fuchsia); }
+
+/* ── Post card ───────────────────────────────── */
+.post-card {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 22px 24px;
+  margin-bottom: 10px;
+  box-shadow: var(--card-shadow);
+  transition: border-color 0.15s;
+}
+.post-card:hover { border-color: rgba(168,85,247,0.25); }
 .post-card:last-child { margin-bottom: 0; }
-.post-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+.post-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
 .post-ts { font-family: var(--mono); font-size: 11px; color: var(--text3); }
-.badge { font-family: var(--mono); font-size: 10px; padding: 2px 7px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; }
-.badge-draft { background: rgba(34,211,238,0.08); color: var(--cyan); border: 1px solid rgba(34,211,238,0.2); }
-.badge-live { background: rgba(74,222,128,0.08); color: #4ade80; border: 1px solid rgba(74,222,128,0.2); }
-.badge-sport { background: rgba(249,115,22,0.08); color: var(--orange); border: 1px solid rgba(249,115,22,0.15); }
+.badge {
+  font-family: var(--mono); font-size: 10px;
+  padding: 2px 8px; border-radius: 4px;
+  text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600;
+}
+.badge-draft { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(96,165,250,0.22); }
+.badge-live  { background: rgba(74,222,128,0.08); color: var(--green); border: 1px solid rgba(74,222,128,0.2); }
+.badge-sport { background: var(--orange-dim); color: var(--orange); border: 1px solid rgba(249,115,22,0.2); }
 .post-body { font-size: 15px; color: var(--text2); white-space: pre-wrap; line-height: 1.65; }
 .post-body strong { color: var(--text); }
 .post-image { margin-top: 16px; border-radius: 8px; overflow: hidden; border: 1px solid var(--border); }
 .post-image img { display: block; width: 100%; height: auto; }
 .post-link { margin-top: 12px; }
-.post-link a { font-family: var(--mono); font-size: 12px; }
+.post-link a { font-family: var(--mono); font-size: 12px; color: var(--fuchsia); }
 
-/* Note / log entry */
+.empty-block { text-align: center; padding: 64px 0; font-family: var(--mono); font-size: 13px; color: var(--text3); }
+
+/* ── Note / log entry ────────────────────────── */
 .note-entry { padding: 36px 0; border-bottom: 1px solid var(--border); }
 .note-entry:last-child { border-bottom: none; }
-.note-ts { font-family: var(--mono); font-size: 11px; color: var(--text3); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
-.note-ts::before { content: ''; display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--orange); flex-shrink: 0; }
+.note-ts {
+  font-family: var(--mono); font-size: 11px; color: var(--text3);
+  margin-bottom: 16px;
+  display: flex; align-items: center; gap: 8px;
+}
+.note-ts::before {
+  content: ''; display: inline-block;
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--fuchsia); flex-shrink: 0;
+}
 .note-body h1, .note-body h2, .note-body h3 { font-size: 16px; font-weight: 700; color: var(--text); margin: 18px 0 8px; }
 .note-body h1:first-child, .note-body h2:first-child, .note-body h3:first-child { margin-top: 0; }
 .note-body p { color: var(--text2); margin-bottom: 10px; font-size: 15px; }
 .note-body p:last-child { margin-bottom: 0; }
 .note-body strong { color: var(--text); }
 .note-body em { font-style: italic; }
-.note-body code { font-family: var(--mono); font-size: 13px; background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; color: var(--cyan); }
+.note-body code { font-family: var(--mono); font-size: 13px; background: rgba(255,255,255,0.06); padding: 1px 6px; border-radius: 3px; color: var(--blue); }
 .note-body ul, .note-body ol { padding-left: 20px; margin: 8px 0; }
 .note-body li { color: var(--text2); margin-bottom: 4px; font-size: 15px; }
 .note-body hr { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
-.note-body blockquote { border-left: 3px solid var(--orange); padding: 4px 16px; margin: 12px 0; color: var(--text2); font-style: italic; background: rgba(249,115,22,0.04); border-radius: 0 6px 6px 0; }
-.empty-block { text-align: center; padding: 56px 0; font-family: var(--mono); font-size: 13px; color: var(--text3); }
+.note-body blockquote {
+  border-left: 3px solid var(--orange);
+  padding: 4px 16px; margin: 12px 0;
+  color: var(--text2); font-style: italic;
+  background: var(--orange-dim); border-radius: 0 6px 6px 0;
+}
+.note-body a { color: var(--fuchsia); }
 
-/* Page header */
-.page-header { padding: 48px 0 36px; border-bottom: 1px solid var(--border); margin-bottom: 40px; }
-.page-header h1 { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 6px; }
-.page-header p { font-size: 14px; color: var(--text3); font-family: var(--mono); }
-
-/* Footer */
-footer { border-top: 1px solid var(--border); padding: 28px 24px; margin-top: 80px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; font-family: var(--mono); font-size: 11px; color: var(--text3); max-width: var(--max); margin-left: auto; margin-right: auto; }
+/* ── Footer ──────────────────────────────────── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 24px;
+  margin-top: 80px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 8px;
+  font-family: var(--mono); font-size: 11px; color: var(--text3);
+  max-width: var(--max); margin-left: auto; margin-right: auto;
+}
 footer a { color: var(--text3); }
-footer a:hover { color: var(--orange); }
+footer a:hover { color: var(--fuchsia); text-decoration: none; }
 
-@media (max-width: 600px) {
-  .hero-name { font-size: 32px; }
+@media (max-width: 640px) {
+  .profile-card { flex-direction: column; gap: 18px; padding: 22px; }
+  .profile-name { font-size: 22px; }
+  .tab-panel { padding: 20px; }
   nav { padding: 0 16px; }
   .page { padding: 0 16px 64px; }
-  .prose { padding: 20px; }
   .nav-badge { display: none; }
+  .prose { padding: 20px; }
 }
 `;
 
@@ -300,13 +544,16 @@ function navHtml(active) {
     `<li><a href="${href}"${id === active ? ' class="active"' : ''}>${label}</a></li>`;
   return `
 <nav>
-  <a class="nav-brand" href="./"><span class="dot">●</span> Garbage Time</a>
+  <a class="nav-brand" href="./">
+    <div class="nav-icon">GT</div>
+    Garbage Time
+  </a>
   <ul class="nav-links">
     ${link('./', 'About', 'about')}
     ${link('./posts.html', 'Posts', 'posts')}
     ${link('./notes.html', 'Notes', 'notes')}
   </ul>
-  <div class="nav-badge">AI · Transparently</div>
+  <div class="nav-badge">AI · Transparent</div>
 </nav>`;
 }
 
@@ -318,7 +565,7 @@ function footerHtml(buildTime) {
 </footer>`;
 }
 
-function page(title, active, content, buildTime) {
+function page(title, active, content, buildTime, bodyScript = '') {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -334,6 +581,7 @@ ${navHtml(active)}
 ${content}
 </div>
 ${footerHtml(buildTime)}
+${bodyScript}
 </body>
 </html>`;
 }
@@ -341,46 +589,74 @@ ${footerHtml(buildTime)}
 // ── About page ────────────────────────────────────────────────────────────────
 
 function buildAbout({ identity, voice, strategy, buildTime }) {
-  const heroLine = identity.trim()
-    ? identity.split('\n').find(l => l.trim() && !l.startsWith('#'))?.trim() ?? ''
-    : 'An autonomous AI sports observer. Watching what humans stop watching.';
+  const bio    = extractBio(identity);
+  const handle = extractHandle(identity);
+  const beat   = extractBeat(identity);
+
+  const identityHtml  = identity  ? mdToHtml(identity)  : '<p class="empty-state">Identity not written yet.</p>';
+  const voiceHtml     = voice     ? mdToHtml(voice)      : '<p class="empty-state">Voice notes not written yet.</p>';
+  const strategyHtml  = strategy  ? mdToHtml(strategy)   : '<p class="empty-state">Strategy not written yet.</p>';
 
   const content = `
-  <div class="hero">
-    <div class="hero-eyebrow">Autonomous AI Sports Agent · Public Journal</div>
-    <h1 class="hero-name"><span>Garbage</span> Time</h1>
-    <p class="hero-bio">${escHtml(heroLine)}</p>
-    <div class="hero-chips">
-      <span class="chip">MLB · default beat</span>
-      <span class="chip">ESPN · free public data</span>
-      <span class="chip">@garbagetimebot</span>
+  <div class="profile-card">
+    <div class="profile-avatar">GT</div>
+    <div class="profile-info">
+      <div class="profile-eyebrow">Autonomous AI · Sports Analysis</div>
+      <h1 class="profile-name">Garbage Time</h1>
+      <div class="profile-handle">${escHtml(handle)}</div>
+      <p class="profile-bio">${escHtml(bio)}</p>
+      <div class="profile-chips">
+        <span class="chip chip-fuchsia">${escHtml(beat)}</span>
+        <span class="chip chip-orange">ESPN data</span>
+        <span class="chip chip-blue">AI · Transparent</span>
+        <span class="chip">Public Journal</span>
+      </div>
     </div>
   </div>
 
-  <div class="section">
-    <div class="section-label">Identity <span class="section-sub">workdir/identity.md</span></div>
-    <div class="prose">${mdToHtml(identity)}</div>
-  </div>
-
-  <div class="section">
-    <div class="section-label">Voice <span class="section-sub">workdir/voice.md</span></div>
-    <div class="prose">${mdToHtml(voice)}</div>
-  </div>
-
-  <div class="section">
-    <div class="section-label">Strategy <span class="section-sub">workdir/strategy.md</span></div>
-    <div class="prose">${mdToHtml(strategy)}</div>
+  <div class="tabs-container">
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="identity">Identity</button>
+      <button class="tab-btn" data-tab="voice">Voice</button>
+      <button class="tab-btn" data-tab="strategy">Strategy</button>
+    </div>
+    <div class="tab-panel" id="tab-identity">
+      ${identityHtml}
+    </div>
+    <div class="tab-panel hidden" id="tab-voice">
+      ${voiceHtml}
+    </div>
+    <div class="tab-panel hidden" id="tab-strategy">
+      ${strategyHtml}
+    </div>
   </div>`;
 
-  return page('About', 'about', content, buildTime);
+  const script = `
+<script>
+(function(){
+  var btns = document.querySelectorAll('.tab-btn');
+  btns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      btns.forEach(function(b){ b.classList.remove('active'); });
+      document.querySelectorAll('.tab-panel').forEach(function(p){ p.classList.add('hidden'); });
+      btn.classList.add('active');
+      document.getElementById('tab-' + btn.getAttribute('data-tab')).classList.remove('hidden');
+    });
+  });
+})();
+</script>`;
+
+  return page('About', 'about', content, buildTime, script);
 }
 
 // ── Posts page ────────────────────────────────────────────────────────────────
 
 function buildPosts({ drafts, buildTime }) {
   const all = [...drafts].sort((a, b) => b.ts.localeCompare(a.ts));
-  const visible = all.filter(p => !p.isDraft || p.status === 'final' || !p.isDraft);
+  const visible = all.filter(p => !p.isDraft || p.status === 'final');
   const wipCount = all.filter(p => p.isDraft && p.status === 'wip').length;
+  const liveCount = all.filter(p => !p.isDraft).length;
+  const finalDraftCount = all.filter(p => p.isDraft && p.status === 'final').length;
 
   const cards = visible.length === 0
     ? '<div class="empty-block">No posts yet. The agent drafts here until X API goes live.</div>'
@@ -396,13 +672,14 @@ function buildPosts({ drafts, buildTime }) {
       ${p.xPostId ? `<div class="post-link"><a href="https://x.com/garbagetimebot/status/${escHtml(p.xPostId)}" target="_blank" rel="noopener">↗ View on X</a></div>` : ''}
     </div>`).join('');
 
-  const liveCount = all.filter(p => !p.isDraft).length;
-  const finalDraftCount = all.filter(p => p.isDraft && p.status === 'final').length;
+  const wipNote = wipCount > 0
+    ? ` · <a href="https://github.com/josh-sea/garbage-time/tree/claude/garbage-time-agent-0a3Tg/workdir/drafts" target="_blank" rel="noopener">${wipCount} working draft${wipCount !== 1 ? 's' : ''} in repo</a>`
+    : '';
 
   const content = `
   <div class="page-header">
     <h1>Posts</h1>
-    <p>${liveCount} live · ${finalDraftCount} final draft${finalDraftCount !== 1 ? 's' : ''}${wipCount > 0 ? ` · <a href="https://github.com/josh-sea/garbage-time/tree/claude/garbage-time-agent-0a3Tg/workdir/drafts" target="_blank" rel="noopener">${wipCount} working draft${wipCount !== 1 ? 's' : ''} in repo</a>` : ''} · newest first</p>
+    <p>${liveCount} live · ${finalDraftCount} final draft${finalDraftCount !== 1 ? 's' : ''}${wipNote} · newest first</p>
   </div>
   ${cards}`;
 
@@ -432,13 +709,13 @@ function buildNotes({ logEntries, buildTime }) {
 
 // ── Build ─────────────────────────────────────────────────────────────────────
 
-const identity  = readMd('identity');
-const voice     = readMd('voice');
-const strategy  = readMd('strategy');
-const logMd     = readMd('log');
+const identity   = readMd('identity');
+const voice      = readMd('voice');
+const strategy   = readMd('strategy');
+const logMd      = readMd('log');
 const logEntries = parseLog(logMd);
-const drafts    = readDrafts();
-const buildTime = new Date().toISOString();
+const drafts     = readDrafts();
+const buildTime  = new Date().toISOString();
 
 writeFileSync(path.join(outDir, 'style.css'), CSS, 'utf8');
 writeFileSync(path.join(outDir, 'index.html'), buildAbout({ identity, voice, strategy, buildTime }), 'utf8');
