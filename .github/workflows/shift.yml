@@ -1,0 +1,67 @@
+name: Agent Shift
+
+on:
+  # Fires every 30 min; agent decides whether to actually run based on next-wake.txt
+  schedule:
+    - cron: "*/30 * * * *"
+
+  # Manual trigger from GitHub UI — always runs the shift regardless of wake time
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Force run even if not yet scheduled wake time"
+        type: boolean
+        default: true
+
+permissions:
+  contents: write  # needed to push workdir changes back
+
+jobs:
+  shift:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Always check out the working branch, not just the default branch
+          ref: claude/garbage-time-agent-0a3Tg
+          # Use a PAT if you need to push to a protected branch; GITHUB_TOKEN
+          # works for normal branches
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install chromium --with-deps
+
+      - name: Run shift
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          DRY_RUN: ${{ vars.DRY_RUN || 'true' }}
+          DAILY_POST_CAP: ${{ vars.DAILY_POST_CAP || '6' }}
+          DAILY_API_BUDGET_USD: ${{ vars.DAILY_API_BUDGET_USD || '5' }}
+        run: |
+          if [ "${{ github.event.inputs.force }}" = "true" ] || [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "Force run (workflow_dispatch or force=true)"
+            npm run force-shift
+          else
+            echo "Scheduled run — checking wake time"
+            npm run shift
+          fi
+
+      - name: Commit and push workdir changes
+        run: |
+          git config user.name "Garbage Time Agent"
+          git config user.email "agent@garbagetime.ai"
+          git add workdir/
+          if git diff --cached --quiet; then
+            echo "No workdir changes to commit"
+          else
+            git commit -m "shift: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            git push origin claude/garbage-time-agent-0a3Tg
+          fi

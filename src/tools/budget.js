@@ -1,11 +1,12 @@
 import Database from 'better-sqlite3';
-import { existsSync, mkdirSync } from 'fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import path from 'path';
 
 const repoRoot = path.resolve(fileURLToPath(import.meta.url), '../../..');
 const workdir = path.join(repoRoot, 'workdir');
 const dbPath = path.join(workdir, 'state.db');
+const nextWakeFile = path.join(workdir, 'next-wake.txt');
 
 let _db = null;
 
@@ -110,12 +111,22 @@ export function getRecentPosts(limit = 10) {
 }
 
 export function getConfig(key) {
+  // next_wake_at is stored in a committed text file so it survives across
+  // fresh environments (GitHub Actions, new clones, etc.)
+  if (key === 'next_wake_at' && existsSync(nextWakeFile)) {
+    const val = readFileSync(nextWakeFile, 'utf8').trim();
+    if (val) return val;
+  }
   const db = getDb();
   const row = db.prepare(`SELECT value FROM config WHERE key = ?`).get(key);
   return row?.value ?? null;
 }
 
 export function setConfig(key, value) {
+  if (key === 'next_wake_at') {
+    if (!existsSync(workdir)) mkdirSync(workdir, { recursive: true });
+    writeFileSync(nextWakeFile, String(value), 'utf8');
+  }
   const db = getDb();
   db.prepare(`INSERT OR REPLACE INTO config (key, value) VALUES (?, ?)`).run(key, String(value));
 }
