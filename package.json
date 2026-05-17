@@ -11,7 +11,8 @@
     "shift": "node src/scheduler.js",
     "force-shift": "node src/agent.js",
     "test-sports": "node -e \"import('./src/tools/sports-data.js').then(m => m.getScoreboard('basketball', 'nba')).then(r => console.log(JSON.stringify(r, null, 2))).catch(console.error)\"",
-    "test-render": "node -e \"import('./src/tools/render.js').then(m => m.renderHtmlToPng('<html><body style=\\\"background:#0d0d0f;color:#f4f4f5;font-size:48px;display:flex;align-items:center;justify-content:center;height:100vh\\\">Test OK</body></html>', 'test-output.png')).then(p => console.log('Rendered to', p)).catch(console.error)\""
+    "test-render": "node -e \"import('./src/tools/render.js').then(m => m.renderHtmlToPng('<html><body style=\\\"background:#0d0d0f;color:#f4f4f5;font-size:48px;display:flex;align-items:center;justify-content:center;height:100vh\\\">Test OK</body></html>', 'test-output.png')).then(p => console.log('Rendered to', p)).catch(console.error)\"",
+    "docs": "node docs/build.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.30.0",
