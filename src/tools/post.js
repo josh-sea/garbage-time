@@ -7,6 +7,25 @@ import { recordPost, getRecentPosts } from './budget.js';
 const repoRoot = path.resolve(fileURLToPath(import.meta.url), '../../..');
 const draftsDir = path.join(repoRoot, 'workdir', 'drafts');
 
+function saveDraft(content, mediaPath, final) {
+  if (!existsSync(draftsDir)) mkdirSync(draftsDir, { recursive: true });
+  const ts = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+  const status = final ? 'final' : 'wip';
+  const filename = `${ts}-${status}.md`;
+  const draftPath = path.join(draftsDir, filename);
+  let draftContent = `# Draft — ${new Date().toISOString()}\nstatus: ${status}\n\n${content}\n`;
+  if (mediaPath) draftContent += `\n**Media:** ${mediaPath}\n`;
+  writeFileSync(draftPath, draftContent, 'utf8');
+  recordPost({ postedAt: new Date().toISOString(), content, mediaPath: mediaPath ?? null, isDraft: true });
+  return {
+    success: true,
+    draft: true,
+    final,
+    path: draftPath,
+    message: `${final ? 'Final draft' : 'Working draft'} saved to ${filename}`,
+  };
+}
+
 export async function postToX(content, mediaPath, final = false) {
   const dryRun = process.env.DRY_RUN !== 'false';
 
@@ -14,34 +33,7 @@ export async function postToX(content, mediaPath, final = false) {
     console.warn(`[post] Warning: content is ${content.length} chars (limit 280). Posting anyway.`);
   }
 
-  if (dryRun) {
-    if (!existsSync(draftsDir)) mkdirSync(draftsDir, { recursive: true });
-
-    const ts = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
-    const status = final ? 'final' : 'wip';
-    const filename = `${ts}-${status}.md`;
-    const draftPath = path.join(draftsDir, filename);
-
-    let draftContent = `# Draft — ${new Date().toISOString()}\nstatus: ${status}\n\n${content}\n`;
-    if (mediaPath) draftContent += `\n**Media:** ${mediaPath}\n`;
-
-    writeFileSync(draftPath, draftContent, 'utf8');
-
-    recordPost({
-      postedAt: new Date().toISOString(),
-      content,
-      mediaPath: mediaPath ?? null,
-      isDraft: true,
-    });
-
-    return {
-      success: true,
-      draft: true,
-      final,
-      path: draftPath,
-      message: `${final ? 'Final draft' : 'Working draft'} saved to ${filename}`,
-    };
-  }
+  if (dryRun) return saveDraft(content, mediaPath, final);
 
   const { X_API_KEY, X_API_SECRET, X_ACCESS_TOKEN, X_ACCESS_SECRET } = process.env;
   if (!X_API_KEY || !X_API_SECRET || !X_ACCESS_TOKEN || !X_ACCESS_SECRET) {
@@ -55,36 +47,43 @@ export async function postToX(content, mediaPath, final = false) {
     accessSecret: X_ACCESS_SECRET,
   });
 
-  let mediaIds = [];
-  if (mediaPath && existsSync(mediaPath)) {
-    const mediaData = readFileSync(mediaPath);
-    const mediaId = await client.v1.uploadMedia(mediaData, { mimeType: 'image/png' });
-    mediaIds = [mediaId];
+  try {
+    let mediaIds = [];
+    if (mediaPath && existsSync(mediaPath)) {
+      const mediaData = readFileSync(mediaPath);
+      const mediaId = await client.v1.uploadMedia(mediaData, { mimeType: 'image/png' });
+      mediaIds = [mediaId];
+    }
+
+    const tweetPayload = { text: content };
+    if (mediaIds.length > 0) tweetPayload.media = { media_ids: mediaIds };
+
+    const tweet = await client.v2.tweet(tweetPayload);
+    const xPostId = tweet.data.id;
+
+    recordPost({ postedAt: new Date().toISOString(), content, mediaPath: mediaPath ?? null, isDraft: false, xPostId });
+    console.log(`[post] Posted to X: https://x.com/garbagetimebot/status/${xPostId}`);
+    return {
+      success: true,
+      draft: false,
+      final,
+      x_post_id: xPostId,
+      url: `https://x.com/garbagetimebot/status/${xPostId}`,
+      message: `Posted to X: ${xPostId}`,
+    };
+  } catch (err) {
+    // 402 = API plan doesn't support posting; fall back to draft so content isn't lost
+    const code = err.code ?? err.data?.status;
+    if (code === 402 || code === 403) {
+      console.warn(`[post] X API returned ${code} — saving as draft instead. Upgrade to Basic plan to enable live posting.`);
+      return {
+        ...saveDraft(content, mediaPath, final),
+        api_error: code,
+        message: `X API ${code} — saved as draft. Upgrade plan to post live.`,
+      };
+    }
+    throw err;
   }
-
-  const tweetPayload = { text: content };
-  if (mediaIds.length > 0) tweetPayload.media = { media_ids: mediaIds };
-
-  const tweet = await client.v2.tweet(tweetPayload);
-  const xPostId = tweet.data.id;
-
-  recordPost({
-    postedAt: new Date().toISOString(),
-    content,
-    mediaPath: mediaPath ?? null,
-    isDraft: false,
-    xPostId,
-  });
-
-  console.log(`[post] Posted to X: https://x.com/garbagetimebot/status/${xPostId}`);
-  return {
-    success: true,
-    draft: false,
-    final,
-    x_post_id: xPostId,
-    url: `https://x.com/garbagetimebot/status/${xPostId}`,
-    message: `Posted to X: ${xPostId}`,
-  };
 }
 
 export async function readXEngagement() {
