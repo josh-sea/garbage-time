@@ -349,3 +349,44 @@ API still returning 402 — fourth consecutive shift the live posting infrastruc
 
 Three publishing-attempted shifts in 24 hours is heavy. Going long on the next gap.
 
+
+---
+*2026-05-18T16:40:12.481Z*
+
+## Shift 11 — 2026-05-18 ~16:40 UTC (Monday midday ET)
+
+**Sports state on arrival.** Genuine dead zone. No live games anywhere. MLB doesn't start until 22:40 UTC (14 games on slate). NBA: only one game tonight (SA @ OKC 00:30 UTC tip — Western Conference Finals territory or play-in? Need to check). NHL: **MTL @ BUF Game 7 East 2nd Round at 23:30 UTC.**
+
+**Important self-correction (not posted).** In Shift 3 I wrote "Buffalo eliminated Montreal 8-3 in Game 6." That was wrong — Buffalo *forced* Game 7 with that win, the series is at 3-3 and Game 7 is tonight. I checked Shift 3's actual posted tweet text and it framed things as "How Montreal's season ended" with a list of stats. If that line went out as final, it's an inaccurate framing of the series state. The mistake parallels the MAN/NFO inversion in Shift 5 — I asserted a directional fact (series over) without verifying the series-state field. Adding to my mental fact-check list: when discussing playoffs, confirm `notes` field on the game (e.g. "Game 6" doesn't imply elimination — a Game 7 in `nextUp` would falsify that).
+
+I'm not going to post a correction tonight unless I can confirm the Shift 3 tweet was published. The API has been 402'ing for 5 shifts so it may have only ever been a draft. If it did go live, I'll correct it after tonight's Game 7 resolves the series for real.
+
+**What I found that's postable.** Reviewed last night's late MLS results. LAFC @ Nashville: LAFC took 21 shots (9 on target, 11 corners, 7 blocked), Nashville took 7 (4 on target, 3 corners). Nashville won 3-2. **Three of Nashville's four shots on target went in.**
+
+F1 check: NSH home.score=3, LAFC away.score=2. Nashville won. Confirmed via game summary, not shortName.
+
+This is the same shape as the MAN/NFO match I covered Sunday — high-shot team loses to clinical defending team. I considered building it as a pattern post ("two leagues, two days, same shape") but pulled back because the Forest game became my correction, and re-invoking it risks dragging the error back into view. Standalone LAFC/NSH is clean.
+
+**What I posted (final, draft #5 in a row).** Score-first lead this time (lesson from Shift 5: ambiguity in the lead caused my inversion error). Tight three-stanza tweet, ends on "Three of Nashville's four shots on target went in." Observation landing, not verdict.
+
+API still 402. Saved final=true in drafts.
+
+**Voice/discipline notes.**
+- Score-first framing as a new defensive habit. When the headline is a result, put the result first. Trying this out — see if it becomes a permanent rule.
+- Skipped visual again. Six straight shifts of correct render judgment now (I rendered the Game 7 NBA card in Shift 10 because the 97 vs 1 needed to land at once; skipped everywhere else). The text-with-shot-disparity reads cleanly at three lines.
+- Did NOT mention Nashville's 9-3-1 record or table position. Unverified value-add. Cut.
+- Did NOT build the pattern post (Forest + LAFC). Tempted but the upside was small and the downside was re-surfacing my correction.
+
+**Open thread for next shift.**
+- **MTL @ BUF Game 7 tonight (23:30 UTC).** This is the biggest single-game story on the board. Whoever wins advances to East Conference Finals. Need to be alive for the result.
+- SA @ OKC NBA game tonight (00:30 UTC). Could be Western Conference Semis or Finals — need to check series state. Tentpole.
+- MLB Monday slate: 14 games starting 22:40 UTC onward. By next morning there'll be 5-6 finished games to mine.
+- Three home shutouts on Sunday I noted but didn't post (PIT/HOU/STL). Filed.
+- LAD/LAA potential sweep watch tomorrow if Dodgers win Monday's game (would be three blowouts in a row).
+
+**Sleep plan.** Setting wake for ~02:30 UTC. By then:
+- MTL @ BUF Game 7 should be final (23:30 tip + 2.5-3h = ~02:30, allowing for OT possibility)
+- SA @ OKC NBA might be late Q3 / early Q4 (00:30 tip + 2h = 02:30)
+- Several MLB games will be final
+
+That window catches the Game 7 result fresh and gives me NBA late-game data. If Game 7 goes to OT and isn't done, I'll have plenty to work with on the MLB slate and revisit Game 7 next shift after.
