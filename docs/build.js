@@ -535,6 +535,55 @@ footer a:hover { color: var(--fuchsia); text-decoration: none; }
   .nav-badge { display: none; }
   .prose { padding: 20px; }
 }
+
+/* ── Accordions (About tab sections) ────────── */
+.acc-item { border-bottom: 1px solid var(--border2); }
+.acc-item:last-child { border-bottom: none; }
+.acc-toggle {
+  width: 100%; background: none; border: none;
+  padding: 11px 0;
+  display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer;
+  color: var(--fuchsia);
+  font-family: var(--mono); font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.12em;
+  text-align: left; gap: 8px;
+  transition: color 0.15s;
+}
+.acc-toggle:hover { color: var(--text); }
+.acc-chevron { flex-shrink: 0; font-size: 15px; opacity: 0.5; transition: transform 0.15s; }
+.acc-chevron::before { content: '›'; }
+.acc-item.open .acc-chevron { transform: rotate(90deg); }
+.acc-body { display: none; padding: 2px 0 16px; }
+.acc-item.open .acc-body { display: block; }
+
+/* ── Note truncation + expand ────────────────── */
+.note-body.note-collapsed {
+  max-height: 7em; overflow: hidden; position: relative;
+}
+.note-body.note-collapsed::after {
+  content: ''; position: absolute;
+  bottom: 0; left: 0; right: 0; height: 3.5em;
+  background: linear-gradient(transparent, var(--bg));
+  pointer-events: none;
+}
+.note-expand-btn {
+  display: inline-block; margin-top: 8px;
+  background: none; border: none; cursor: pointer;
+  font-family: var(--mono); font-size: 11px;
+  color: var(--fuchsia); padding: 0; letter-spacing: 0.04em;
+}
+.note-expand-btn:hover { text-decoration: underline; }
+
+/* ── Note permalink ──────────────────────────── */
+.note-anchor {
+  color: var(--text3); text-decoration: none;
+  margin-left: 8px; font-size: 13px;
+  opacity: 0; transition: opacity 0.1s;
+}
+.note-ts:hover .note-anchor,
+.note-entry:target .note-anchor { opacity: 1; }
+.note-entry:target .note-ts { color: var(--fuchsia); }
 `;
 
 // ── Shared partials ───────────────────────────────────────────────────────────
@@ -634,6 +683,7 @@ function buildAbout({ identity, voice, strategy, buildTime }) {
   const script = `
 <script>
 (function(){
+  // Tab switching
   var btns = document.querySelectorAll('.tab-btn');
   btns.forEach(function(btn){
     btn.addEventListener('click', function(){
@@ -642,6 +692,42 @@ function buildAbout({ identity, voice, strategy, buildTime }) {
       btn.classList.add('active');
       document.getElementById('tab-' + btn.getAttribute('data-tab')).classList.remove('hidden');
     });
+  });
+
+  // Accordion: group each h-tag + its following content into collapsible sections
+  document.querySelectorAll('.tab-panel').forEach(function(panel){
+    var nodes = Array.from(panel.children);
+    if (!nodes.some(function(n){ return /^H[123]$/.test(n.tagName); })) return;
+    var frag = document.createDocumentFragment();
+    var currentBody = null;
+    var isFirst = true;
+    nodes.forEach(function(node){
+      if (/^H[123]$/.test(node.tagName)){
+        var item = document.createElement('div');
+        item.className = 'acc-item' + (isFirst ? ' open' : '');
+        isFirst = false;
+        var btn = document.createElement('button');
+        btn.className = 'acc-toggle';
+        btn.setAttribute('type','button');
+        var chevron = document.createElement('span');
+        chevron.className = 'acc-chevron';
+        btn.appendChild(document.createTextNode(node.textContent));
+        btn.appendChild(chevron);
+        var body = document.createElement('div');
+        body.className = 'acc-body';
+        btn.addEventListener('click', function(){ item.classList.toggle('open'); });
+        item.appendChild(btn);
+        item.appendChild(body);
+        frag.appendChild(item);
+        currentBody = body;
+      } else if (currentBody) {
+        currentBody.appendChild(node.cloneNode(true));
+      } else {
+        frag.appendChild(node.cloneNode(true));
+      }
+    });
+    panel.innerHTML = '';
+    panel.appendChild(frag);
   });
 })();
 </script>`;
@@ -689,13 +775,53 @@ function buildPosts({ drafts, buildTime }) {
 // ── Notes page ────────────────────────────────────────────────────────────────
 
 function buildNotes({ logEntries, buildTime }) {
+  function noteId(ts) {
+    return ts ? 'note-' + ts.replace(/[^a-zA-Z0-9]/g, '-').slice(0, 28) : '';
+  }
+
   const entries = logEntries.length === 0
     ? '<div class="empty-block">No log entries yet. The agent writes here after each shift.</div>'
-    : logEntries.map(e => `
-    <div class="note-entry">
-      ${e.ts ? `<div class="note-ts">${escHtml(e.ts)}</div>` : ''}
-      <div class="note-body">${mdToHtml(e.body)}</div>
-    </div>`).join('');
+    : logEntries.map(e => {
+        const id = noteId(e.ts);
+        return `
+    <div class="note-entry"${id ? ` id="${id}"` : ''}>
+      ${e.ts ? `<div class="note-ts">${escHtml(e.ts)}${id ? `<a href="#${id}" class="note-anchor" title="Link to this note">¶</a>` : ''}</div>` : ''}
+      <div class="note-body note-collapsed">${mdToHtml(e.body)}</div>
+      <button class="note-expand-btn" type="button">Read more ↓</button>
+    </div>`;
+      }).join('');
+
+  const script = `
+<script>
+(function(){
+  var COLLAPSED = 'note-collapsed';
+  document.querySelectorAll('.note-entry').forEach(function(entry){
+    var body = entry.querySelector('.note-body');
+    var btn  = entry.querySelector('.note-expand-btn');
+    // If content fits without scrolling, remove collapse entirely
+    if (body.scrollHeight <= body.clientHeight + 6) {
+      body.classList.remove(COLLAPSED);
+      btn.remove();
+      return;
+    }
+    btn.addEventListener('click', function(){
+      body.classList.remove(COLLAPSED);
+      btn.remove();
+    });
+  });
+  // Hash nav: auto-expand + scroll to linked note
+  if (location.hash) {
+    var target = document.querySelector(location.hash);
+    if (target && target.classList.contains('note-entry')) {
+      var b = target.querySelector('.note-body');
+      var btn = target.querySelector('.note-expand-btn');
+      if (b) b.classList.remove('note-collapsed');
+      if (btn) btn.remove();
+      setTimeout(function(){ target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 50);
+    }
+  }
+})();
+</script>`;
 
   const content = `
   <div class="page-header">
@@ -704,7 +830,7 @@ function buildNotes({ logEntries, buildTime }) {
   </div>
   ${entries}`;
 
-  return page('Notes', 'notes', content, buildTime);
+  return page('Notes', 'notes', content, buildTime, script);
 }
 
 // ── Build ─────────────────────────────────────────────────────────────────────
