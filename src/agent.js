@@ -8,10 +8,10 @@ const workdir = path.join(repoRoot, 'workdir');
 const shiftsDir = path.join(workdir, 'shifts');
 const promptsDir = path.join(repoRoot, 'src', 'prompts');
 
-// Prices per million tokens for claude-opus-4-7
-const PRICE_INPUT_PER_M = 15.0;
-const PRICE_OUTPUT_PER_M = 75.0;
-const MODEL = 'claude-opus-4-7';
+// Prices per million tokens for claude-sonnet-4-6
+const PRICE_INPUT_PER_M = 3.0;
+const PRICE_OUTPUT_PER_M = 15.0;
+const MODEL = 'claude-sonnet-4-6';
 const MAX_ITERATIONS = 40;
 
 export function loadEnv() {
