@@ -175,9 +175,15 @@ async function dispatchTool(name, input) {
     case 'write_journal':
       writeJournal(input.file, input.content);
       return { success: true, file: input.file };
-    case 'append_journal':
-      appendJournal(input.content);
-      return { success: true };
+    case 'append_journal': {
+      const anchorId = appendJournal(input.content);
+      const siteUrl = process.env.SITE_URL || '';
+      return {
+        success: true,
+        note_anchor: anchorId,
+        note_url: siteUrl ? `${siteUrl}/notes.html#${anchorId}` : null,
+      };
+    }
     case 'check_budget':
       return checkBudget();
     case 'post_to_x':
@@ -202,7 +208,9 @@ export async function runShift() {
   const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
   const startedAt = new Date().toISOString();
 
-  const systemPrompt = readFileSync(path.join(promptsDir, 'system.md'), 'utf8');
+  const siteUrl = process.env.SITE_URL || 'https://josh-sea.github.io/garbage-time';
+  const systemPrompt = readFileSync(path.join(promptsDir, 'system.md'), 'utf8')
+    .replace(/\{SITE_URL\}/g, siteUrl);
   const identityContent = existsSync(path.join(workdir, 'identity.md'))
     ? readFileSync(path.join(workdir, 'identity.md'), 'utf8').trim()
     : '';

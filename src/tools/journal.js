@@ -33,4 +33,7 @@ export function appendJournal(content) {
   const timestamp = new Date().toISOString();
   const entry = `\n---\n*${timestamp}*\n\n${content}\n`;
   appendFileSync(fp, entry, 'utf8');
+  // Return the anchor ID so the agent can construct a shareable note URL
+  const anchorId = 'note-' + timestamp.replace(/[^a-zA-Z0-9]/g, '-').slice(0, 28);
+  return anchorId;
 }

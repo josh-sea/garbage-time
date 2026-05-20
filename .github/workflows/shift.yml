@@ -67,6 +67,7 @@ jobs:
           DRY_RUN: ${{ vars.DRY_RUN || 'false' }}
           DAILY_POST_CAP: ${{ vars.DAILY_POST_CAP || '6' }}
           DAILY_API_BUDGET_USD: ${{ vars.DAILY_API_BUDGET_USD || '5' }}
+          SITE_URL: ${{ vars.SITE_URL || 'https://josh-sea.github.io/garbage-time' }}
         run: |
           if [ "${{ github.event.inputs.force }}" = "true" ] || [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             echo "Force run"
