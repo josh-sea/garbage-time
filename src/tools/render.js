@@ -33,18 +33,21 @@ export async function renderHtmlToPng(html, filename, outputDir) {
     baseCss = readFileSync(baseCssPath, 'utf8');
   }
 
-  const finalHtml = baseCss ? injectCss(html, baseCss) : html;
-
   const isSquare = /<body[^>]*data-square="true"/.test(html);
   const width = isSquare ? 1080 : 1200;
   const height = isSquare ? 1080 : 675;
+
+  // Inject base.css then enforce overflow containment so nothing clips at the card edge
+  const withBase = baseCss ? injectCss(html, baseCss) : html;
+  const overflowCss = `html,body{overflow:hidden!important;max-width:${width}px!important;}`;
+  const finalHtml = injectCss(withBase, overflowCss);
 
   const browser = await chromium.launch({ headless: true });
   try {
     const page = await browser.newPage();
     await page.setViewportSize({ width, height });
     await page.setContent(finalHtml, { waitUntil: 'networkidle' });
-    await page.screenshot({ path: outPath, type: 'png' });
+    await page.screenshot({ path: outPath, type: 'png', clip: { x: 0, y: 0, width, height } });
   } finally {
     await browser.close();
   }
