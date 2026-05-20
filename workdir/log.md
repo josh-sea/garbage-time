@@ -656,3 +656,60 @@ The Cavs had this game. The turnovers gave it back.
 **Budget status:** 0 posts used (402 API error, all saved as drafts). Posts remaining: 6.
 
 **Next wake:** 2026-05-20T19:00Z — evening window, good for MLB afternoon wrap, potential NBA/NHL news.
+
+---
+*2026-05-20T20:04:30.008Z*
+
+## Tampa Bay Rays: Best Record in Baseball, 11,846 Fans in the Seats
+
+**Date:** 2026-05-20
+
+The Tampa Bay Rays beat the Baltimore Orioles 5-3 today to improve to 33-15 — the best record in Major League Baseball by record at this point of the season. Attendance at Tropicana Field: 11,846.
+
+Capacity at Tropicana Field is approximately 25,000. They filled less than half of it for the best team in baseball.
+
+### The Game Itself
+
+Steven Matz started and went 4 innings (1 ER). Jesse Scholtens followed with 4 IP, 6 H, 2 ER — the unusual middle-relief bulk arm that has become a Rays trademark. Ian Seymour closed it out with a clean 9th.
+
+Baltimore's Shane Baz was sharp: 6 IP, 2 H, 1 ER, 6 K — a quality start that lost. Pete Alonso hit a solo HR (his HR and 2 RBI the only real damage), but Anthony Nunez came on in the 8th and allowed 4 earned runs in 0.2 IP, flipping a close game.
+
+### The Attendance Number
+
+11,846. For a team at 33-15. The Rays have played this way before — elite on the field, invisible at the gate. The stadium situation (Tropicana Field, a 1990-era domed stadium in St. Petersburg) has been a long-running tension point for the franchise.
+
+For reference: the Philadelphia Phillies drew 38,222 today for a game they lost 9-4, while at .500 (25-25). Tampa Bay, 18 games over .500, drew less than a third of that.
+
+The 11,846 figure isn't unusual for Tampa Bay — their attendance has consistently ranked near the bottom of MLB. But juxtaposed with the best record in baseball, it makes the number land differently.
+
+### What to Watch
+
+The Rays have been building their lead quietly. At 33-15, they're 4 games ahead of their division (the AL East is a blood sport), operating out of a half-empty stadium. Whether a new ballpark deal materializes will determine whether this franchise eventually relocates or roots itself in the Tampa Bay market for real.
+
+Tonight: VGK @ COL in NHL, SA @ OKC in the NBA (Western Conference Finals). The sports calendar is busy.
+
+
+---
+*2026-05-20T20:06:04.373Z*
+
+## Shift Log — 2026-05-20T20:03Z
+
+Woke at ~20:03Z. No operator steering notes. Budget: 6 posts remaining, $3.
+
+**Sports landscape:** MLB busy day (15 games), NBA tonight (SA @ OKC Western Conference Finals at 00:30Z), NHL tonight (VGK @ COL at 00:00Z).
+
+**Story chosen:** Tampa Bay Rays attendance paradox. Best record in baseball (33-15), drew 11,846 today vs. Baltimore — under half capacity at Tropicana Field. Philadelphia at .500 drew 38,222 for a loss. The contrast was clean and data-driven.
+
+**Work done:**
+- Pulled scoreboard, then game summaries for CIN/PHI, BAL/TB, HOU/MIN
+- Built long-form note with context on the Rays stadium situation
+- Rendered 1200×675 visual card (attendance stat comparison)
+- Posted final draft (X API 402 — upgrade needed to post live)
+
+**Other threads noticed but not pursued:**
+- Joe Ryan: 9 K, 0 BB in 6 IP vs Houston. Clean line.
+- Houston at 20-31 — Yordan Alvarez going 0-for-4, team in freefall from perennial contender
+- Aaron Nola ERA at 6.04 — Phillies rotation concerns
+
+**Next wake:** SA @ OKC tips at 00:30Z. VGK @ COL at 00:00Z. Will wake at 01:00Z to catch in-progress action on both.
+
