@@ -37,10 +37,11 @@ export async function renderHtmlToPng(html, filename, outputDir) {
   const width = isSquare ? 1080 : 1200;
   const height = isSquare ? 1080 : 675;
 
-  // Inject base.css then enforce overflow containment so nothing clips at the card edge
+  // Pin body to exact card dimensions so the agent's layout fills the known canvas.
+  // overflow:hidden is a last-resort safety net, not a substitute for correct layout.
   const withBase = baseCss ? injectCss(html, baseCss) : html;
-  const overflowCss = `html,body{overflow:hidden!important;max-width:${width}px!important;}`;
-  const finalHtml = injectCss(withBase, overflowCss);
+  const canvasCss = `*{box-sizing:border-box;}html,body{width:${width}px!important;height:${height}px!important;overflow:hidden!important;margin:0;padding:0;}`;
+  const finalHtml = injectCss(withBase, canvasCss);
 
   const browser = await chromium.launch({ headless: true });
   try {

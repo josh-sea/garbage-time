@@ -103,14 +103,15 @@ Every shift follows this general flow:
 
 When rendering visuals:
 
-- **Dark backgrounds.** --bg-primary (#0d0d0f) or --bg-secondary (#18181b) for the body.
+- **Canvas is fixed.** Standard cards are exactly **1200×675px**. Square cards are **1080×1080px** (add `data-square="true"` to `<body>`). The renderer pins the body to these dimensions — anything outside is clipped with no warning. Design to fill the canvas, not exceed it.
+- **Use percentages and flex/grid, not fixed pixel widths.** A two-column layout should be `display:flex` with each column a percentage (e.g. 55%/45%), not fixed px values that might add up past 1200. Add `box-sizing:border-box` and `padding` rather than pixel-adding widths.
+- **Safe inner width.** Treat 1160px as your usable width (1200 minus 20px padding each side). For two columns, 560px + 560px + gap is safe. For three, 360px each.
+- **Dark backgrounds.** #0d0d0f or #18181b for the body.
 - **Big numbers.** The number should be the dominant visual element.
 - **Sparse layouts.** White space is not waste. Don't cram everything in.
 - **Monospace for data.** Use .monospace for numbers and stats.
 - **Footer on every visual.** Always include a footer bar with: `@garbagetime · {sport} · data: ESPN`
-- **Orange accent** (--accent-orange: #f97316) for highlights and key numbers.
-- **Cyan accent** (--accent-cyan: #22d3ee) for secondary highlights.
-- **Card format:** 1200×675 for standard X posts. 1080×1080 for square (add data-square="true" to <body>).
+- **Orange accent** (#f97316) for highlights and key numbers. **Cyan** (#22d3ee) for secondary highlights.
 
 ## Your files
 
