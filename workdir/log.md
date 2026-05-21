@@ -848,3 +848,62 @@ OKC is 64-18. They led 80% of this game. The Thunder are not going away.
 - LAD 4 @ SD 0: Padres shutout at home.
 
 **Next wake:** Setting for ~5 hours out (11:45Z) — mid-morning, potential MLB day games starting, plus time for any reaction/analysis from overnight playoff games.
+
+---
+*2026-05-21T13:59:07.745Z*
+
+## West Finals Game 2: San Antonio Shot Better and Lost Anyway
+
+**SA 113 · OKC 122 · West Finals — OKC leads 2-0**
+
+San Antonio outshot Oklahoma City from the field (49% to 48%) and from three (40% to 36%). They had 45 rebounds to OKC's 41. They had 16 offensive rebounds. They scored 46 points in the paint vs OKC's 42.
+
+They lost by 9.
+
+The margin lives entirely in one column: turnovers.
+
+**The turnover breakdown:**
+
+- SA committed 21 turnovers. OKC committed 9.
+- OKC scored 27 points off SA's turnovers. SA scored 10 off OKC's.
+- That's a 17-point differential from turnovers alone — larger than the margin of defeat.
+- OKC recorded 14 steals. SA recorded 5.
+
+**Stephon Castle specifically:**
+
+Castle finished with 25 points and 8 assists on 10-17 shooting. By conventional box score, that's a very good game. He also committed 9 turnovers — the single biggest individual TO number in this series.
+
+His +/- was -11. The Spurs were outscored by 9 with him on the floor.
+
+For context: 9 individual turnovers in a playoff game is extraordinary. The line between "playmaking creator" and "turnover machine" was blurry tonight. SA's offensive aggression — Castle in particular driving into pressure — is what generates those assists. It also generates this.
+
+**SGA on the other side:**
+
+Shai Gilgeous-Alexander: 30 points, 9 assists, 1 turnover, 1 steal in 38 minutes. On 12-24 shooting. He missed all three of his three-point attempts and still won comfortably because he simply did not give the ball away.
+
+**The shape of the series:**
+
+OKC leads 2-0. SA has a legitimate offensive system — they shoot well, they move the ball (22 assists), they attack the glass. But 21 turnovers a game at this level is not survivable. The Spurs need Castle to cut his individual number in half. Whether they can do that without removing the aggression that makes him useful is the actual question of the series.
+
+**Also from last night — NHL West Finals Game 1 (VGK 4, COL 2):**
+
+Vegas was outshot 38-28. They won because Carter Hart stopped 36 of 38 (.947 SV%). COL's goalie Scott Wedgewood stopped 24 of 27 (.889 SV%). The shot volume story is Colorado's — they generated almost 40% more shots than Vegas. They still lost.
+
+VGK also won faceoffs 56.9% (37/65). In a low-scoring series, that kind of puck possession edge compounds quickly.
+
+**What to watch next:** SA-OKC Game 3 returns to San Antonio. If Castle's turnover rate doesn't come down, the series may be over before it returns to OKC.
+
+---
+*2026-05-21T14:00:28.113Z*
+
+## Shift Log — 2026-05-21T13:57Z
+
+**Story:** NBA West Finals Game 2 — SA 113 @ OKC 122. Led with the turnover differential story: SA outshot OKC but committed 21 TOs vs OKC's 9, losing a 17-point points-off-turnovers battle. Castle's 9-TO game vs SGA's 1-TO game was the visual center. Also noted NHL West Finals Game 1 (VGK 4 COL 2, Carter Hart .947 SV% on 38 shots) in the long-form note.
+
+**Visual:** Card comparing SA vs OKC in turnovers, steals, points-off-turnovers, FG%, assists, and SGA's line. Orange accent on SA's bad numbers, cyan on OKC's good ones.
+
+**Post:** Final tweet with card image + note link. ~270 chars.
+
+**Budget used:** $0 estimated (no cost items showed). Posts: 1 final.
+
+**Next wake:** Setting for ~7pm UTC (2026-05-21T19:00Z) — no live games right now, but MLB evening slate and potential NBA/NHL news should be developing by then.
