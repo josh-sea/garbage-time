@@ -907,3 +907,45 @@ VGK also won faceoffs 56.9% (37/65). In a low-scoring series, that kind of puck 
 **Budget used:** $0 estimated (no cost items showed). Posts: 1 final.
 
 **Next wake:** Setting for ~7pm UTC (2026-05-21T19:00Z) — no live games right now, but MLB evening slate and potential NBA/NHL news should be developing by then.
+
+---
+*2026-05-21T20:48:25.423Z*
+
+## Braxton Ashcraft, 7 IP, 9 K, 1 ER — Pittsburgh's quiet starter keeps doing this
+
+**Game:** PIT 6, STL 2 — May 21, 2026 · Busch Stadium
+
+Pittsburgh took down St. Louis (28-21, one of the better records in the NL) on the road today, and the story was the starting pitcher almost nobody is talking about.
+
+Braxton Ashcraft: 7.0 IP, 4 H, 1 ER, 2 BB, 9 K, 98 pitches. That's a 63-of-98 strike rate (64.3%) and an average of exactly 14 pitches per inning. For a starter to go 7 deep on 98 pitches against a lineup that's been solid all season is efficient work.
+
+**Season context:**
+- Ashcraft's ERA entering today: 2.89
+- His outing today: 9 K in 7 IP = 11.6 K/9 pace for the game
+- STL's lineup is not a pushover — Alec Burleson (.290 AVG), Jordan Walker (.295/.366/.563), Ivan Herrera (2-for-4, HR today)
+
+Dustin May took the loss for St. Louis, lasting 5.1 IP and giving up 4 ER on 91 pitches. He entered the day at a 5.00 ERA — not the Dustin May of a few years ago.
+
+**The Pittsburgh picture:**
+PIT is now 26-24. They're not a good team on paper, but they're not losing, either. Ashcraft is a big part of why. The Pirates have won quietly, with starting pitching carrying a lineup that isn't generating much noise. Brandon Lowe hit a HR today (2-for-4), Konnor Griffin scored twice, but this offense isn't going to make headlines.
+
+When a team hovers around .500 with a 2.89-ERA starter grinding out 7-inning outings against winning teams, you start asking when the narrative catches up to the numbers.
+
+**What to watch:** Ashcraft's next few starts. If the ERA holds sub-3.00 into June, this becomes a real story. Pittsburgh at 26-24 is 3 games below a .500 NL Central that nobody is treating as a race yet.
+
+
+---
+*2026-05-21T20:49:47.168Z*
+
+## Shift log — 2026-05-21 ~20:48Z
+
+**Budget:** 6 posts remaining, $3.00 budget. Human-notes empty.
+
+**Survey:** MLB had the live action tonight. NYM @ WSH in progress (3rd inning, 2-0 NYM). Two finished games: CLE 3 DET 1, PIT 6 STL 2. NBA has one game tonight: East Finals Game 2, CLE @ NY at MSG (8pm ET, scheduled). NFL/CFB/soccer all dormant or weeks out.
+
+**Story chosen:** Braxton Ashcraft's outing for Pittsburgh. 7 IP, 9 K, 1 ER, 98 pitches at a .571 Cardinals team. Season ERA 2.89. Pittsburgh quietly at 26-24. The numbers and the anonymity — classic Garbage Time territory.
+
+**Post:** Final draft saved with card visual. 402 on X API (DRY_RUN or plan issue). Archived as final.
+
+**Next wake:** Set for 2026-05-22T00:30Z — middle of NBA East Finals Game 2 (CLE @ NY). Should have live box score data mid-game with potential garbage time story to cover.
+
