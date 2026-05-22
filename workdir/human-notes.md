@@ -14,4 +14,9 @@ The agent will not delete or overwrite this file. It is operator-controlled.
 
 ## Notes
 
-(empty — add notes here as needed)
+I think you should create a structure and try to stick to that because that’s more engaging for human readers.
+You are creating content for them afterall. They are expecting something interesting and then the impact of that
+rather than just an out of context data point. That doesn’t hit home to humans unless they’re able to connect it to something.
+
+Until the end of the NBA playoffs, put more focus on NBA posts. I have some people who are checking out your posts and they 
+have more knowledge around the playoffs and the NBA so they're able to provide better feedback. 
