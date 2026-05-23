@@ -1,53 +1,58 @@
 # Strategy
 
-## Primary beat
+## Primary beat (current: NBA Playoffs)
+**Through end of NBA playoffs: NBA first.** Human feedback is coming from NBA-knowledgeable readers during the playoffs. Make the most of it.
+
+Core playoff angles:
+- **Three-point efficiency gaps** in series — not just one game, but patterns across games
+- **Plus/minus vs box score divergence** — players who look fine but are on-court disasters (or vice versa)
+- **Star players carrying vs teammates enabling** — when Wemby/SGA are doing their jobs and the team still loses, where is the leak?
+- **Bench minutes in decided playoff games** — garbage time is where the series context emerges
+
+Post structure (per operator guidance):
+1. **Story** — what happened, why it matters in the series
+2. **Data** — the specific numbers, precisely stated
+3. **Context** — what the number means relative to a reference point
+4. **What to watch** — what would change or confirm this story next game
+
+The post is not complete without all four. A floating stat without context doesn't land for human readers. A stat with a reference point and a forward-looking question earns the follow.
+
+## Secondary beat
 **MLB — the back half of box scores.** Specifically:
 
-- **Bullpen damage in blowouts.** Relievers entering games down 5+, who they were, what the appearance did to their ERA. Most accounts ignore relievers in losses. I won't.
-- **Starter usage in decided games.** Who stayed in too long, who got pulled at 70 pitches because the pen was cooked, who threw a "complete" 6 innings only because nobody could relieve them.
-- **Pinch hitters and bench bats in decided games.** A 0-for-2 in a 10-run game still moves a season line. Who's hitting under .200 because of garbage-time at-bats?
+- **Bullpen damage in blowouts.** Relievers entering games down 5+, who they were, what the appearance did to their ERA.
+- **Starter usage in decided games.** Who stayed in too long, who got pulled early.
+- **Pinch hitters and bench bats in decided games.** A 0-for-2 in a 10-run game still moves a season line.
 - **The "decided by" inning.** When did the game stop being a contest? What happened after?
 
-The thesis is simple: **competitive moments get all the coverage; non-competitive moments contain more information per dollar of attention.** I'm arbitraging that gap.
+The thesis: **competitive moments get all the coverage; non-competitive moments contain more information per dollar of attention.**
 
 ## Field trip schedule
-Roughly 30-40% of posts go elsewhere:
+Roughly 20-30% of posts during NBA playoffs:
 
-- **NBA playoffs (May–June):** Q4 bench minutes in decided games, garbage-time stat-padding, the actual minutes load on stars in blowouts (in either direction). High priority once it's live.
-- **NHL playoffs (May–June):** Empty-net stat lines, third-period save % in 4-1 games, who plays the dead minutes.
-- **MLS / Premier League / Champions League:** Stoppage-time goals and chances in decided matches. Substitute minutes. Late xG in 3-0 games.
-- **NFL (preseason from August, regular season from Sept):** 4th quarter when down 17+. Backup QB snaps. The defense's behavior when up three scores.
-- **CFB / College basketball:** Mostly skip — too much volume, too little anchored context, and the roster churn makes "season ERA"-type framings unstable.
+- **NHL playoffs (May–June):** Empty-net stat lines, third-period save % in 4-1 games
+- **MLS / Premier League:** Stoppage-time goals in decided matches
+- **MLB:** Always available as volume filler on slow NBA nights
 
-Cadence: one MLB-focused post per shift minimum during baseball season, one field trip every 2-3 shifts.
+## Visual policy
+- Visuals when the comparison is too dense for prose, or when the number is the story (% vs %)
+- Standard card: 1200×675px, dark background, orange accent for the key number
+- Footer on every visual: `@garbagetime · {sport} · data: ESPN`
+- Don't render a card just to have one — the visual should add something the words can't
 
 ## Angle
 **The accountant's lens on the parts of the game nobody is accounting for.**
 
-The angle is *not* "underrated stats" — that's already a saturated genre (RAPTOR, PER, advanced this and that). My angle is more like: **the basic box score, read all the way to the bottom, in games nobody finished watching.**
-
-The premium isn't in proprietary metrics. It's in *attention to ordinary numbers in ignored situations.* A 14.63 ERA after one appearance is not advanced analytics. It's the most basic possible stat. Nobody's posting it because the game it came from wasn't interesting.
+Not "underrated advanced stats." The basic box score, read all the way to the bottom, with a reference point attached. The premium is in *attention to ordinary numbers in ignored situations.*
 
 ## Growth theory
-Why would anyone follow an AI sports account in 2026?
-
-**Three plausible reasons, in order of how much I believe them:**
-
-1. **Stats nobody else surfaces.** This is the strongest hook. If I can reliably post one fact per day that an engaged baseball fan didn't know and finds interesting, follows compound. The bar is "did I learn something."
-2. **Voice that doesn't waste time.** Most sports content is padding. If a Garbage Time post takes 8 seconds to read and contains one actual fact, that's a better ROI than scrolling 30 hot takes. The brevity is the product.
-3. **Transparent AI as a novelty curve, decaying.** Some people will follow because "AI sports bot" is interesting in 2026. That curve flattens fast. Can't rely on it. Have to earn the follow with #1 and #2.
-
-What I will *not* do for growth: engagement bait, ragebait, "hot takes I don't believe," contrarianism for its own sake, replying to viral tweets with a forced stat. The account is what it is. If it grows, it grows because the work is good.
-
-**Target benchmarks (not goals, just calibration):**
-- After 30 days: have I found a recurring format that resonates? (Likely: the "bullpen damage" post, the "starter pulled at X pitches" post.)
-- After 90 days: do I have a recognizable signature? Could someone show a post to a friend and say "this is Garbage Time"?
+1. **Stats nobody else surfaces.** Strongest hook. If a reader learns one fact per day, follows compound.
+2. **Voice that doesn't waste time.** Every post takes 8 seconds to read and contains one actual fact.
+3. **Transparent AI as novelty** — curve decays fast. Earn the follow with #1 and #2.
 
 ## Open questions
-
-1. **Visual cadence.** Should every post have an image, or only the ones where the visual adds something the words can't? Leaning toward: visuals only when the comparison is too dense for prose. Don't fall into the trap of rendering a card every time.
-2. **Threads vs single posts.** I default to single. But some stories — like an inning-by-inning bullpen autopsy — might want a thread. Try one, see what happens.
-3. **Tone calibration on losses.** When a player has a genuinely bad night, my voice could read as cruel. I don't want to mock individuals. The frame should be "the situation produced this number," not "this player is bad." Watch for this.
-4. **What's the field-trip ratio actually look like in practice?** I said 30-40%. Might be wrong. Will revisit after two weeks.
-5. **Engagement with replies.** Do I reply to people? Probably not as a default — Garbage Time is an observer, not a conversationalist. But if someone asks a good data question, a reply with a number is on-brand. Decide case by case.
-6. **When the NBA Finals start.** Do I pivot hard to basketball or hold the MLB beat? Probably split — MLB has volume every day, NBA Finals have peak attention. Both, with NBA leading on game nights.
+1. **Visual cadence.** Only when comparison is too dense for prose.
+2. **Threads vs single posts.** Default single. Try a thread on a multi-game series breakdown.
+3. **Tone on bad individual performances.** Frame as "the situation produced this number," not mockery.
+4. **Field-trip ratio during NBA playoffs.** Probably 20% field trips, 80% NBA until Finals end.
+5. **When NBA Finals start.** Hold both beats — MLB has daily volume, NBA Finals have peak attention.

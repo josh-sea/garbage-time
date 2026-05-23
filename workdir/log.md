@@ -1112,3 +1112,58 @@ Wemby's line is particularly notable — he's scoring efficiently *and* distribu
 
 **Budget:** 5 posts remaining. $3 budget. Spent minimal API.
 
+
+---
+*2026-05-23T04:57:57.704Z*
+
+## West Finals Game 3: OKC 123, SA 108 — The Three-Point Tax
+
+**Series context:** OKC leads 3-0. No team has ever come back from 3-0 in NBA playoff history. This game didn't close the door — it welded it shut.
+
+**The number that explains Game 3:**
+OKC went 17-for-38 from three (44.7%). San Antonio went 13-for-41 (31.7%).
+
+That's 4 more makes on 3 fewer attempts. In a 15-point game, those 12 extra points from the arc were the margin.
+
+**Why this matters beyond one game:**
+San Antonio's offense is built on creating open looks — for Wembanyama in the mid-range and post, for Castle and Fox in the paint, and kicking out to shooters when the defense collapses. But OKC's length and switchability has been forcing SA's shooters into difficult pull-ups all series. 13-for-41 (31.7%) is below the league's garbage-time three-point average (~34%). SA was a below-average three-point team in a game where threes decided everything.
+
+**Wembanyama's line vs the series hole:**
+Wemby had 26 points, 4 rebounds, 3 assists, 2 blocks on 8-15 shooting. That's a good game. He was also +4 on the night — one of the few Spurs who held their own. But here's the problem: he's playing 39 minutes, carrying the offense, and SA is still losing by 15. The Spurs' best player is doing his job. The rest of the team isn't.
+
+**Castle's +/- as a diagnostic:**
+Stephon Castle: 14 points, 7 assists, 5 rebounds. Sounds fine. But 1-for-8 from the field, and a -17 plus/minus — the worst on the court by 8 points (next worst was -9 for Dort, OKC). Castle got to the line 14 times (11-14 FT), which inflated his point total, but every time he was on the floor, OKC outscored SA. He was getting fouled because he couldn't create clean looks. That's not a sustainable offensive model.
+
+**SGA's actual game:**
+Shai Gilgeous-Alexander: 26 points, 12 assists, 2 turnovers, 12-for-12 from the free throw line. His field goal shooting was 6-17 (35%), which would be a rough night in isolation. But he had 12 assists (2 TO) and drew free throws at will. He was +11. SGA's value in this game wasn't his scoring efficiency — it was the pressure he created that opened everything else up. OKC went 17-for-38 from three partly because SGA kept collapsing SA's defense.
+
+**What to watch in Game 4:**
+- Does SA's three-point shooting regress to something functional (35%+)? At 31.7%, they're voluntarily giving OKC the game.
+- Castle's shot vs Castle's role. If he's 1-8 again, Pop has a problem. If Pop reduces his minutes, SA's playmaking dries up.
+- Can Wembanyama get more post touches? His 8-15 efficiency is good, but he's working too hard for those looks in 39 minutes.
+
+**The series in one sentence:** OKC is longer, deeper, and more efficient from three. SA needs two of those three things to change simultaneously to win four straight.
+
+*Data: ESPN box score, West Finals Game 3, 2026-05-22*
+
+
+---
+*2026-05-23T04:59:15.917Z*
+
+## Shift — 2026-05-23T04:57Z
+
+**Game covered:** West Finals Game 3 — OKC 123, SA 108. OKC leads series 3-0.
+
+**Story angle:** Three-point shooting gap as the series-defining pattern. OKC 17-38 (45%) vs SA 13-41 (32%). The 12-point swing from the arc was the margin in a 15-point game. Supporting context: Castle's +/- (-17) vs box score (14pts/7ast), SGA's 12-12 FT + 12 assists as the real value driver.
+
+**What I made:** Visual card (1200x675, two-team comparison layout, orange accent on OKC) + long-form note + final tweet with note link.
+
+**Operator notes applied:**
+- NBA-first focus through end of playoffs ✓
+- Post structure: story → data → context → what to watch ✓
+- Updated strategy.md to reflect these priorities ✓
+
+**Budget used this shift:** ~3 API calls for data, 1 render. Budget at ~$0.30 estimated. Well within limits.
+
+**Next wake:** Set for 2026-05-24T02:00Z — Game 4 of West Finals should be ~May 24. Will catch pre/post-game timing. Also MLB games will be finished by then.
+
