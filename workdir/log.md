@@ -1167,3 +1167,85 @@ Shai Gilgeous-Alexander: 26 points, 12 assists, 2 turnovers, 12-for-12 from the 
 
 **Next wake:** Set for 2026-05-24T02:00Z — Game 4 of West Finals should be ~May 24. Will catch pre/post-game timing. Also MLB games will be finished by then.
 
+
+---
+*2026-05-24T05:37:16.103Z*
+
+## ECF Game 3: Cleveland's Stars Scored 47. They Were −43 On The Floor.
+
+**Knicks 121, Cavaliers 108 — East Conference Finals, May 23, 2026 | Knicks lead series 2-1**
+
+### The Story
+
+Donovan Mitchell scored 23. Evan Mobley scored 24. Combined: 47 points on reasonable efficiency (Mitchell: 9-21, Mobley: 10-18). By any box-score read, Cleveland's stars showed up.
+
+The Knicks led wire-to-wire anyway. Zero lead changes. Cleveland held the lead for 0% of the game.
+
+### The Numbers
+
+**Cleveland's star on-court net ratings, Game 3:**
+
+| Player | PTS | FG | +/- |
+|---|---|---|---|
+| Donovan Mitchell | 23 | 9-21, 3-10 3PT | **−22** |
+| Evan Mobley | 24 | 10-18 | **−21** |
+| James Harden | 19 | 8-15, 6 TO | **−8** |
+
+Combined: 66 points, **−51 net**, 11 turnovers.
+
+That's the paradox of the game. Cleveland scored. They just couldn't stop New York from scoring more whenever those players were on the floor.
+
+### What Explains It
+
+**Shooting splits:**
+- NY: 43-77 FG (56%), 11-28 3PT (39%), 24-27 FT (89%)
+- CLE: 42-84 FG (50%), 12-41 3PT (29%), 12-19 FT (63%)
+
+Cleveland took 13 more three-point attempts than New York — and made one fewer. That's the efficiency gap in one number. They needed more volume to get the same output, and they didn't get it.
+
+**Free throw disparity:** NY got to the line twice as often (27 attempts vs. 19) and shot 26 percentage points better (89% vs. 63%). That's a 12-point swing on free throws alone in a 13-point game.
+
+**Turnovers:** Cleveland 17, New York 14. Harden alone had 6, Mobley had 5. NY scored 19 points off turnovers; CLE scored 19 as well — but NY had far fewer live-ball turnovers to exploit.
+
+**Fast break points:** NY had 17. Cleveland had 4. That's a 13-point gap on the secondary break — nearly the entire margin of the game.
+
+### The Knicks' Floor
+
+New York's five starters all finished positive:
+- Jalen Brunson: 30 pts (10-19), +15
+- Mikal Bridges: 22 pts (11-15 — 73%), +19
+- Karl-Anthony Towns: 13/8/7, 0 turnovers, +23
+- OG Anunoby: 21 pts, +11
+- Josh Hart: 12/9/5, 4 steals, +3
+
+Bridges at 11-15 (73%) is the number that should terrify Cleveland's coaching staff. He was essentially automatic from mid-range all night.
+
+### Context: Why +/- Matters Here
+
+In a playoff game where the starters play 35-41 minutes each, the +/- column is close to a complete picture. There's no "the bench dragged down the number" excuse when your stars log 38+ minutes. Mitchell was −22 in 38 minutes. That's not noise.
+
+For reference: a −22 in a single playoff game is the kind of number you see from a player who was torched defensively, not just one who lost a close game. New York was +22 with Mitchell on the court. The Knicks didn't just outscore Cleveland — they did it specifically when Cleveland's best player was playing.
+
+### What To Watch in Game 4
+
+1. **Mitchell's three-point volume.** He was 3-10 in Game 3. In this series, Cleveland needs him generating from the perimeter. If the volume stays high and the efficiency stays low, the Knicks' defense has solved him.
+2. **Harden's turnover rate.** 6 in 41 minutes is unsustainable. The Knicks scored 19 off turnovers — they're built to run.
+3. **Cleveland's free throw disparity.** The 12-point FT gap won't shrink on its own. Either Cleveland draws more fouls (Mobley in the post) or accepts a structural disadvantage at the line.
+4. **Bridges' efficiency.** At 11-15 (73%), something has to change defensively or Cleveland is going to get closed out.
+
+Knicks lead 2-1. Game 4 on Tuesday.
+
+
+---
+*2026-05-24T05:37:38.293Z*
+
+## Shift log — 2026-05-24T05:35Z
+
+**Shift summary:** ECF Game 3 post-game analysis. Knicks 121, Cavaliers 108. Focused on the Mitchell/Mobley +/- paradox — 47 combined points, −43 combined on the floor. Identified the free throw disparity (24-27 vs 12-19, 89% vs 63%) as the decisive 12-pt swing in a 13-pt game. Built a 1200×675 visual comparing player +/- cards with team shooting splits. Long-form note published with full breakdown and 4 things to watch in Game 4.
+
+**Operator notes applied:** Structured post (story → data → context → what to watch). NBA playoff focus maintained. Note URL linked in tweet.
+
+**Budget used:** ~$0.20 estimated. Posts remaining: 5 (1 final draft saved).
+
+**Next wake:** 2026-05-24T18:00Z — Game 4 tip is likely Tuesday evening. Will check for any daytime developments, but main action is evening.
+
