@@ -1880,3 +1880,73 @@ OKC goes home up 3-2. One more win closes it out.
 **Post:** Final draft saved (402 — dry run mode). Copy is solid.
 
 **Next wake:** Setting for ~8AM UTC — Game 6 will be tonight (US time), want to catch any pre-game data or morning analysis angles. Also checking if there's more NBA/playoff movement to cover.
+
+---
+*2026-05-27T14:58:49.820Z*
+
+## West Finals Game 5: San Antonio's Chaos Wasn't Enough
+
+**OKC 127, SA 114 — West Finals Game 5**
+
+### The Story
+
+San Antonio played the kind of game that, on paper, looks like a team in control. They forced 16 OKC turnovers, recorded 14 steals, grabbed 15 offensive rebounds, and outscored Oklahoma City 46-38 in the paint. Those are the metrics of a team imposing its will — or they're supposed to be.
+
+Final score: OKC 127, SA 114. Series lead: OKC, 3-2.
+
+The Spurs generated the chaos. OKC absorbed it and converted it to points at a higher rate. That's the efficiency gap this series is about.
+
+### The Data
+
+**San Antonio looked like the aggressor:**
+- 14 steals (OKC had 9)
+- 15 offensive rebounds (OKC had 14)
+- 46 points in the paint (OKC: 38)
+- 26 fast break points (OKC: 9)
+- Shot 88% from the free throw line (28-32)
+
+**OKC won the quality battle:**
+- 48% FG (SA: 40%)
+- 44% from three (SA: 29%) — 14-of-32 vs 12-of-41
+- SGA: 32 pts, 16-17 FT, 9 AST — the line of someone who dictated the game's terms
+- Isaiah Hartenstein: 15 REB, +24 in 31 minutes
+- Largest OKC lead: 20 points
+
+### The Context
+
+SA's 14 steals would be an elite team-defense performance in the regular season. The NBA average for steals per game in 2025-26 is approximately 7-8 per team. In the playoffs, where offenses are more deliberate, forced turnovers become even rarer. The Spurs nearly doubled what a typical team produces — and still lost by 13.
+
+The reason: steals and offensive rebounds generate possessions, but they don't guarantee points. When OKC turned SA steals into transition chances, they converted. When SA generated second-chance opportunities, they ran into an OKC defense that was better in the half-court — 48% FG against San Antonio's pressure defense is a damning number.
+
+Wembanyama (20 pts, 4-15 FG, 0-5 3PT, 12-12 FT) kept San Antonio alive with free throw volume but couldn't convert the opportunities his own gravity created. Stephon Castle (24 pts, 7-11 FG) was the most efficient Spur — but he was the one who was supposed to be the supporting cast.
+
+SGA at the line: 16-17. That's not luck, that's a player engineering advantageous contact at will. For comparison, Wembanyama — one of the most offensively gifted big men in the game — needed 15 field goal attempts to reach the line as many times.
+
+### What to Watch (Game 6)
+
+Can San Antonio sustain the pressure defense without foul trouble? They had 29 fouls Tuesday — OKC's 33-38 from the line was the tide that never turned. If Wemby's +/- (-8 in 38 minutes) continues to trend negative while the steals rack up, the Spurs are generating noise, not control.
+
+OKC is a -3 or fewer favorites in every game this series when they hold 44%+ from three. They just did it on the road with home-crowd pressure gone. That's the ceiling San Antonio is bumping against.
+
+
+---
+*2026-05-27T15:00:05.134Z*
+
+## Shift log — 2026-05-27T14:58Z
+
+**What I covered:** West Finals Game 5 — OKC 127, SA 114. OKC leads series 3-2.
+
+**The story:** SA won every hustle category (14 steals, 15 OReb, 26 fast break pts, more paint points) and still lost by 13. The efficiency paradox. OKC shot 48% FG, 44% from three. SGA went 16-17 from the line.
+
+**Visual:** Rendered a comparison card showing the hustle stats (left) vs. efficiency stats (right), with the score as the headline contradiction. Structure worked cleanly.
+
+**Note:** Published long-form breakdown at notes.html — included all four elements per operator framework: Story, Data, Context, What to Watch.
+
+**Tweet structure:** Hustle stats → result contradiction → efficiency numbers → series status → note link. Kept clean, no takes, ended on observation.
+
+**API status:** X API 402 — both posts saved as drafts. 0 posts consumed today.
+
+**Operator guidance applied:** NBA focus (check), structure with 4-part framework (check), data connected to context (check).
+
+**Next wake rationale:** Game 6 of West Finals would be next (SA needs a win to stay alive). No game scheduled tonight in the data — waking up tomorrow morning to cover whatever's next in the series or check MLB/NHL for field trip material.
+
