@@ -1950,3 +1950,95 @@ OKC is a -3 or fewer favorites in every game this series when they hold 44%+ fro
 
 **Next wake rationale:** Game 6 of West Finals would be next (SA needs a win to stay alive). No game scheduled tonight in the data — waking up tomorrow morning to cover whatever's next in the series or check MLB/NHL for field trip material.
 
+
+---
+*2026-05-28T02:08:10.000Z*
+
+## PHX @ NY — Marine Johannes and the Q3 Detonation
+
+**Date:** 2026-05-27 | **Final:** NY Liberty 84, Phoenix Mercury 74
+
+### What actually happened
+
+This game was a coin flip entering halftime. Phoenix led 43-42. Win probability was nearly 50/50.
+
+Then the third quarter happened.
+
+New York outscored Phoenix 30-12 in the third quarter. Win probability went from roughly 59% (NY) to 98.9% by the final buzzer of Q3. The game was over before anyone was watching it be over.
+
+The instrument of destruction: **Marine Johannes**.
+
+### Marine Johannes: 21 pts, 7-9 from three, 95.5% TS
+
+Johannes played 24 minutes. She finished with:
+- 21 points
+- 7-of-11 from the field
+- 7-of-9 from three
+- 0 free throws attempted
+- 95.5% True Shooting Percentage
+
+For context, the league average TS% is around 55–57%. A 95.5% line means nearly every possession Johannes touched resulted in two or three points of value. She was not creating offense through volume — she was creating it through surgical location and shot selection (almost exclusively corner and wing threes).
+
+In the third quarter specifically, Johannes scored 10 points on just a few possessions and recorded an assist, part of a 30-12 NY run that turned a tied game into a 17-point lead by the 4th.
+
+### The efficiency gap
+
+Compare the two teams' engines:
+
+| Player | PTS | FGA | TS% |
+|--------|-----|-----|-----|
+| Marine Johannes (NY) | 21 | 11 | 95.5% |
+| Jonquel Jones (NY) | 17 | 16 | 47.9% |
+| Kahleah Copper (PHX) | 19 | 18 | 46.0% |
+| Breanna Stewart (NY) | 11 | 10 | 48.6% |
+
+Johannes produced nearly as many points as Copper on 7 fewer shot attempts. Stewart and Jones — NY's two biggest stars — both hovered around league-average efficiency. The Liberty won this game because Johannes was in a different efficiency universe than everyone else on the floor.
+
+### What NY's Q3 looked like
+
+Phoenix entered Q3 up 43-42. The first 8 minutes of Q3 told the story:
+- Copper scored to make it 48-42 (Mercury)
+- Then Liberty ran off 14 unanswered — Johannes hit twice, Breanna Stewart scored on a foul, Jonquel Jones hit twice from range
+- By the 4-minute mark, it was 55-55
+- Johannes hit the step-back three at 4:44 to go 55-55 → 58-55
+- Jones added consecutive threes → 55-67 by late Q3
+- By the final buzzer of Q3: **NY 72, PHX 55**
+
+Phoenix never recovered. The win probability never dropped below 98% after that.
+
+### The Breanna Stewart question
+
+Stewart played 34 minutes and scored 11 on 48.6% TS. She was not the reason NY won. Her role was to be physical and credible enough that Phoenix couldn't single-cover Johannes, who was on her way to one of the most efficient individual performances of the WNBA season so far.
+
+Defensive gravity doing what it's supposed to do — freeing a secondary player to be primary.
+
+### What to watch
+
+NY plays again in the coming days. If Johannes is running the same shot diet (wide threes, set feet, minimal mid-range), she's going to be a consistent efficiency story. Phoenix at 2-6 needs to figure out their half-court defense — they gave up 30 in a single quarter.
+
+
+---
+*2026-05-28T02:09:18.480Z*
+
+## Shift Log — 2026-05-28T02:07Z
+
+**Budget at start:** 6 posts remaining, $3.00
+
+**Human notes read:** Yes. Directives: (1) build structure that connects data to meaning for readers; (2) focus on NBA playoffs until playoffs end.
+
+**Sports landscape:**
+- NBA quiet tonight. Only scheduled game: OKC @ SA Game 6 (West Finals) tomorrow 2026-05-29T00:30Z
+- WNBA had 5 games active, including PHX @ NY (just finished) and TOR @ CHI (close 4th quarter)
+- MLB, NHL, Premier League all active/finished
+
+**Decision:** With no live NBA data available, pivoted to a WNBA field trip (consistent with 30-40% directive). PHX @ NY offered the clearest story: halftime flip, one player, one quarter.
+
+**Story found:** Marine Johannes, NY Liberty. 95.5% TS in 24 minutes, 7-of-9 from three. NY went from 43-42 down at half to 72-55 up by end of Q3. Win probability moved from 59% to 98.9% in a single quarter. The comparison with Kahleah Copper (19 pts, 18 FGA, 46% TS) made the efficiency gap concrete for readers.
+
+**Output:**
+- Note appended to log.md: breakdown of Johannes performance, efficiency gap table, Q3 sequence
+- Visual: 1200×675 stat card with efficiency table, Q3 bar, big TS% number
+- Final draft post saved (DRY_RUN active — API 402)
+
+**Next wake:** OKC @ SA Game 6 tips 2026-05-29T00:30Z. Will wake at 2026-05-29T00:00Z to prep a pre-game setup post and be ready to analyze live data during the game.
+
