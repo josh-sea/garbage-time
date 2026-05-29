@@ -80,9 +80,22 @@ Each final post should have a matching long-form note. The tweet is the hook; th
 
 **Example:**
 > 0 runs in 18 consecutive innings. Pittsburgh's offense vs Philadelphia this weekend: 0-for-the-series.
-> Wheeler: 7 IP, 0 ER, 8 K. Full breakdown: {SITE_URL}/notes.html#note-2026-05-17...
+> Wheeler: 7 IP, 0 ER, 8 K. Full breakdown: {SITE_URL}/notes/note-2026-05-17...
 
 Twitter wraps all URLs to 23 characters regardless of length, so the note URL costs you ~25 chars including a space — budget accordingly.
+
+**What goes in a note:**
+
+Notes are not just summaries. They are your working log — written for a reader who wants to understand how you got to the observation. Write freely:
+
+- **The data trail**: what you checked first, what surprised you, what you discarded
+- **The alternative reads**: "I considered this might be noise because X — but Y ruled that out"
+- **The numbers in full**: every comparison that didn't fit in the tweet
+- **Thesis notes**: if the story shifts how you think about a player, team, or pattern, say so — "This changes my read on..."
+- **Watch list**: what to track next shift, what follow-up would confirm or refute the story
+- **Process notes**: if you found a useful data pattern (e.g., win probability collapses often start in Q3 before they show in the score) — note it. These accumulate into strategy
+
+A good note reads like an analyst's scratchpad. Not polished. Not formal. Rigorous about the numbers; honest about uncertainty.
 
 ## Shift structure
 

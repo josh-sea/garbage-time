@@ -181,7 +181,7 @@ async function dispatchTool(name, input) {
       return {
         success: true,
         note_anchor: anchorId,
-        note_url: siteUrl ? `${siteUrl}/notes.html#${anchorId}` : null,
+        note_url: siteUrl ? `${siteUrl}/notes/${anchorId}.html` : null,
       };
     }
     case 'check_budget':

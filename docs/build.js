@@ -103,6 +103,53 @@ function tweetLen(text) {
   return text.replace(/https?:\/\/\S+/g, '12345678901234567890123').length;
 }
 
+// Convert ISO timestamp to "May 29, 2026 · 3:45 PM ET" — ignores non-ISO strings
+function formatET(tsStr) {
+  if (!tsStr) return '';
+  // Only attempt conversion for strings that look like ISO dates (YYYY-...)
+  if (!/^\d{4}-\d{2}-\d{2}/.test(tsStr)) return '';
+  const d = new Date(tsStr);
+  if (isNaN(d.getTime())) return '';
+  const year = d.getFullYear();
+  if (year < 2020 || year > 2035) return ''; // guard against epoch/overflow parses
+  return new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/New_York',
+    month: 'short', day: 'numeric', year: 'numeric',
+    hour: 'numeric', minute: '2-digit', hour12: true,
+  }).format(d).replace(' at ', ' · ') + ' ET';
+}
+
+// Derive note ID from raw ISO timestamp (must match journal.js appendJournal)
+function noteId(ts) {
+  return ts ? 'note-' + ts.replace(/[^a-zA-Z0-9]/g, '-').slice(0, 28) : '';
+}
+
+// First meaningful line, stripped of markdown syntax, max 100 chars
+function extractNoteTitle(body) {
+  if (!body) return 'Shift Note';
+  const line = body.split('\n').find(l => {
+    const t = l.trim();
+    return t && t !== '---' && t !== '***' && !/^-{3,}$/.test(t);
+  }) ?? '';
+  return line.replace(/^#{1,6}\s+/, '').replace(/\*\*/g, '').replace(/\*/g, '').replace(/^>\s*/, '').slice(0, 100) || 'Shift Note';
+}
+
+// First ~220 chars of plain text for index preview
+function extractPreview(body, max = 220) {
+  if (!body) return '';
+  const plain = body
+    .replace(/^#{1,6}\s+.+$/mg, '')      // strip headings
+    .replace(/\*\*(.+?)\*\*/g, '$1')      // unbold
+    .replace(/\*([^*]+)\*/g, '$1')        // unitalic
+    .replace(/`[^`]+`/g, '')              // strip code
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // strip links
+    .replace(/^[-*]\s+/mg, '')            // strip list bullets
+    .replace(/^>\s*/mg, '')               // strip blockquotes
+    .replace(/\n+/g, ' ')
+    .trim();
+  return plain.length > max ? plain.slice(0, max).trimEnd() + '…' : plain;
+}
+
 // ── Data readers ──────────────────────────────────────────────────────────────
 
 function readMd(name) {
@@ -500,7 +547,38 @@ nav {
 
 .empty-block { text-align: center; padding: 64px 0; font-family: var(--mono); font-size: 13px; color: var(--text3); }
 
-/* ── Note / log entry ────────────────────────── */
+/* ── Note index cards ────────────────────────── */
+.note-card { padding: 28px 0; border-bottom: 1px solid var(--border); }
+.note-card:last-child { border-bottom: none; }
+.note-card-ts {
+  font-family: var(--mono); font-size: 11px; color: var(--text3);
+  margin-bottom: 8px; display: flex; align-items: center; gap: 8px;
+}
+.note-card-title { font-size: 17px; font-weight: 600; margin: 0 0 10px; }
+.note-card-title a { color: var(--text); text-decoration: none; }
+.note-card-title a:hover { color: var(--fuchsia); }
+.note-card-preview { font-size: 14px; color: var(--text3); margin: 0 0 14px; line-height: 1.6; }
+.note-read-more { font-family: var(--mono); font-size: 12px; color: var(--fuchsia); text-decoration: none; }
+.note-read-more:hover { text-decoration: underline; }
+
+/* ── Individual note page ────────────────────── */
+.note-back { font-family: var(--mono); font-size: 12px; color: var(--text3); text-decoration: none; display: inline-block; margin-bottom: 28px; }
+.note-back:hover { color: var(--fuchsia); }
+.note-headline { font-size: 26px; font-weight: 700; margin: 0 0 10px; line-height: 1.3; }
+.note-page-ts { font-family: var(--mono); font-size: 11px; color: var(--text3); margin-bottom: 32px; }
+.note-full-body { font-size: 15px; color: var(--text2); line-height: 1.75; }
+.note-full-body h1, .note-full-body h2, .note-full-body h3 { color: var(--text); margin: 1.6em 0 0.4em; }
+.note-full-body h1 { font-size: 19px; } .note-full-body h2 { font-size: 17px; } .note-full-body h3 { font-size: 15px; }
+.note-full-body ul, .note-full-body ol { padding-left: 1.4em; margin: 0.5em 0; }
+.note-full-body li { margin: 0.25em 0; }
+.note-full-body code { background: var(--bg3); padding: 2px 6px; border-radius: 3px; font-size: 13px; }
+.note-full-body pre { background: var(--bg3); padding: 16px; border-radius: 6px; overflow-x: auto; margin: 1em 0; }
+.note-full-body blockquote { border-left: 3px solid var(--fuchsia); margin: 1em 0; padding-left: 1em; color: var(--text3); }
+.note-nav { display: flex; gap: 24px; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); font-family: var(--mono); font-size: 12px; }
+.note-nav a { color: var(--text3); text-decoration: none; }
+.note-nav a:hover { color: var(--fuchsia); }
+
+/* ── Note / log entry (legacy) ───────────────── */
 .note-entry { padding: 36px 0; border-bottom: 1px solid var(--border); }
 .note-entry:last-child { border-bottom: none; }
 .note-ts {
@@ -606,19 +684,19 @@ footer a:hover { color: var(--fuchsia); text-decoration: none; }
 
 // ── Shared partials ───────────────────────────────────────────────────────────
 
-function navHtml(active) {
+function navHtml(active, base = '') {
   const link = (href, label, id) =>
     `<li><a href="${href}"${id === active ? ' class="active"' : ''}>${label}</a></li>`;
   return `
 <nav>
-  <a class="nav-brand" href="./">
+  <a class="nav-brand" href="${base}index.html">
     <div class="nav-icon">GT</div>
     Garbage Time
   </a>
   <ul class="nav-links">
-    ${link('./', 'About', 'about')}
-    ${link('./posts.html', 'Posts', 'posts')}
-    ${link('./notes.html', 'Notes', 'notes')}
+    ${link(`${base}index.html`, 'About', 'about')}
+    ${link(`${base}posts.html`, 'Posts', 'posts')}
+    ${link(`${base}notes.html`, 'Notes', 'notes')}
   </ul>
   <div class="nav-badge">AI · Transparent</div>
 </nav>`;
@@ -632,7 +710,7 @@ function footerHtml(buildTime) {
 </footer>`;
 }
 
-function page(title, active, content, buildTime, bodyScript = '') {
+function page(title, active, content, buildTime, bodyScript = '', base = '') {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -640,10 +718,10 @@ function page(title, active, content, buildTime, bodyScript = '') {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="Garbage Time — autonomous AI sports analysis. ${escHtml(title)}.">
 <title>${escHtml(title)} · Garbage Time</title>
-<link rel="stylesheet" href="./style.css">
+<link rel="stylesheet" href="${base}style.css">
 </head>
 <body>
-${navHtml(active)}
+${navHtml(active, base)}
 <div class="page">
 ${content}
 </div>
@@ -812,53 +890,38 @@ function buildPosts({ drafts, buildTime }) {
   return page('Posts', 'posts', content, buildTime, script);
 }
 
-// ── Notes page ────────────────────────────────────────────────────────────────
+// ── Notes pages ───────────────────────────────────────────────────────────────
 
 function buildNotes({ logEntries, buildTime }) {
-  function noteId(ts) {
-    return ts ? 'note-' + ts.replace(/[^a-zA-Z0-9]/g, '-').slice(0, 28) : '';
-  }
-
-  const entries = logEntries.length === 0
-    ? '<div class="empty-block">No log entries yet. The agent writes here after each shift.</div>'
-    : logEntries.map(e => {
+  // Index page: one card per note with preview + link to individual page
+  const cards = logEntries.length === 0
+    ? '<div class="empty-block">No notes yet. The agent writes here after each shift.</div>'
+    : logEntries.map((e, i) => {
         const id = noteId(e.ts);
+        const title = extractNoteTitle(e.body);
+        const preview = extractPreview(e.body);
+        const href = id ? `./notes/${id}.html` : '#';
+        const prev = logEntries[i + 1]; // older
+        const next = logEntries[i - 1]; // newer
         return `
-    <div class="note-entry"${id ? ` id="${id}"` : ''}>
-      ${e.ts ? `<div class="note-ts">${escHtml(e.ts)}${id ? `<a href="#${id}" class="note-anchor" title="Link to this note">¶</a>` : ''}</div>` : ''}
-      <div class="note-body note-collapsed">${mdToHtml(e.body)}</div>
-      <button class="note-expand-btn" type="button">Read more ↓</button>
+    <div class="note-card"${id ? ` id="${id}"` : ''}>
+      <div class="note-card-ts">
+        ${escHtml(formatET(e.ts))}
+        ${id ? `<a href="#${id}" class="note-anchor" title="Permalink">¶</a>` : ''}
+      </div>
+      <h3 class="note-card-title"><a href="${href}">${escHtml(title)}</a></h3>
+      ${preview ? `<p class="note-card-preview">${escHtml(preview)}</p>` : ''}
+      <a class="note-read-more" href="${href}">Read note →</a>
     </div>`;
       }).join('');
 
+  // Hash nav: if an old tweet links to notes.html#note-..., scroll to the card
   const script = `
 <script>
 (function(){
-  var COLLAPSED = 'note-collapsed';
-  document.querySelectorAll('.note-entry').forEach(function(entry){
-    var body = entry.querySelector('.note-body');
-    var btn  = entry.querySelector('.note-expand-btn');
-    // If content fits without scrolling, remove collapse entirely
-    if (body.scrollHeight <= body.clientHeight + 6) {
-      body.classList.remove(COLLAPSED);
-      btn.remove();
-      return;
-    }
-    btn.addEventListener('click', function(){
-      body.classList.remove(COLLAPSED);
-      btn.remove();
-    });
-  });
-  // Hash nav: auto-expand + scroll to linked note
   if (location.hash) {
-    var target = document.querySelector(location.hash);
-    if (target && target.classList.contains('note-entry')) {
-      var b = target.querySelector('.note-body');
-      var btn = target.querySelector('.note-expand-btn');
-      if (b) b.classList.remove('note-collapsed');
-      if (btn) btn.remove();
-      setTimeout(function(){ target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 50);
-    }
+    var t = document.querySelector(location.hash);
+    if (t) setTimeout(function(){ t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 50);
   }
 })();
 </script>`;
@@ -866,11 +929,33 @@ function buildNotes({ logEntries, buildTime }) {
   const content = `
   <div class="page-header">
     <h1>Notes</h1>
-    <p>${logEntries.length} entr${logEntries.length === 1 ? 'y' : 'ies'} · shift diary · newest first</p>
+    <p>${logEntries.length} note${logEntries.length === 1 ? '' : 's'} · shift diary · newest first</p>
   </div>
-  ${entries}`;
+  ${cards}`;
 
-  return page('Notes', 'notes', content, buildTime, script);
+  const indexHtml = page('Notes', 'notes', content, buildTime, script);
+
+  // Individual note pages
+  const notePages = logEntries.map((e, i) => {
+    const id = noteId(e.ts);
+    if (!id) return null;
+    const title = extractNoteTitle(e.body);
+    const olderEntry = logEntries[i + 1];
+    const newerEntry = logEntries[i - 1];
+    const olderLink = olderEntry ? `<a href="./${noteId(olderEntry.ts)}.html">← ${escHtml(extractNoteTitle(olderEntry.body).slice(0, 50))}</a>` : '';
+    const newerLink = newerEntry ? `<a href="./${noteId(newerEntry.ts)}.html" style="margin-left:auto">${escHtml(extractNoteTitle(newerEntry.body).slice(0, 50))} →</a>` : '';
+
+    const noteContent = `
+  <a class="note-back" href="../notes.html">← All notes</a>
+  <h1 class="note-headline">${escHtml(title)}</h1>
+  <div class="note-page-ts">${escHtml(formatET(e.ts))}</div>
+  <div class="note-full-body">${mdToHtml(e.body)}</div>
+  ${(olderLink || newerLink) ? `<div class="note-nav">${olderLink}${newerLink}</div>` : ''}`;
+
+    return { id, html: page(title, 'notes', noteContent, buildTime, '', '../') };
+  }).filter(Boolean);
+
+  return { indexHtml, notePages };
 }
 
 // ── Build ─────────────────────────────────────────────────────────────────────
@@ -883,13 +968,23 @@ const logEntries = parseLog(logMd);
 const drafts     = readDrafts();
 const buildTime  = new Date().toISOString();
 
+const notesNotesDir = path.join(outDir, 'notes');
+mkdirSync(notesNotesDir, { recursive: true });
+
+const { indexHtml: notesIndexHtml, notePages } = buildNotes({ logEntries, buildTime });
+
 writeFileSync(path.join(outDir, 'style.css'), CSS, 'utf8');
 writeFileSync(path.join(outDir, 'index.html'), buildAbout({ identity, voice, strategy, buildTime }), 'utf8');
 writeFileSync(path.join(outDir, 'posts.html'), buildPosts({ drafts, buildTime }), 'utf8');
-writeFileSync(path.join(outDir, 'notes.html'), buildNotes({ logEntries, buildTime }), 'utf8');
+writeFileSync(path.join(outDir, 'notes.html'), notesIndexHtml, 'utf8');
+
+for (const { id, html } of notePages) {
+  writeFileSync(path.join(notesNotesDir, `${id}.html`), html, 'utf8');
+}
+
 copyMedia();
 
 console.log(`Built to docs/site/`);
 console.log(`  identity: ${identity.trim() ? 'yes' : 'empty'}`);
-console.log(`  log entries: ${logEntries.length}`);
+console.log(`  log entries: ${logEntries.length} (${notePages.length} individual pages)`);
 console.log(`  drafts/posts: ${drafts.length}`);
