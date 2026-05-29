@@ -98,6 +98,11 @@ function escHtml(str) {
   return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
+// X compresses every http/https URL to 23 chars via t.co
+function tweetLen(text) {
+  return text.replace(/https?:\/\/\S+/g, '12345678901234567890123').length;
+}
+
 // ── Data readers ──────────────────────────────────────────────────────────────
 
 function readMd(name) {
@@ -479,6 +484,19 @@ nav {
 .post-image img { display: block; width: 100%; height: auto; }
 .post-link { margin-top: 12px; }
 .post-link a { font-family: var(--mono); font-size: 12px; color: var(--fuchsia); }
+.post-char-count {
+  margin-left: auto; font-family: var(--mono); font-size: 10px;
+  color: var(--text3); letter-spacing: 0.04em;
+}
+.post-char-count.over { color: #f87171; }
+.post-copy-btn {
+  background: none; border: 1px solid var(--border); color: var(--text3);
+  font-family: var(--mono); font-size: 10px; padding: 3px 10px; border-radius: 4px;
+  cursor: pointer; transition: border-color 0.15s, color 0.15s;
+  letter-spacing: 0.06em; text-transform: uppercase;
+}
+.post-copy-btn:hover { border-color: var(--orange); color: var(--orange); }
+.post-copy-btn.copied { border-color: #4ade80; color: #4ade80; }
 
 .empty-block { text-align: center; padding: 64px 0; font-family: var(--mono); font-size: 13px; color: var(--text3); }
 
@@ -746,17 +764,23 @@ function buildPosts({ drafts, buildTime }) {
 
   const cards = visible.length === 0
     ? '<div class="empty-block">No posts yet. The agent drafts here until X API goes live.</div>'
-    : visible.map(p => `
+    : visible.map(p => {
+        const len = tweetLen(p.body);
+        const overLimit = len > 280;
+        return `
     <div class="post-card">
       <div class="post-meta">
         <span class="post-ts">${escHtml(p.ts)}</span>
         <span class="badge ${p.isDraft ? 'badge-draft' : 'badge-live'}">${p.isDraft ? 'draft' : 'live'}</span>
         ${p.sport ? `<span class="badge badge-sport">${escHtml(p.sport)}</span>` : ''}
+        <span class="post-char-count${overLimit ? ' over' : ''}" title="X counts URLs as 23 chars">${len}/280</span>
+        <button class="post-copy-btn" data-copy="${escHtml(p.body)}" type="button">Copy</button>
       </div>
       <div class="post-body">${escHtml(p.body)}</div>
       ${p.mediaRelPath ? `<div class="post-image"><img src="./media/${escHtml(p.mediaRelPath)}" alt="post visual" loading="lazy"></div>` : ''}
       ${p.xPostId ? `<div class="post-link"><a href="https://x.com/garbagetimebot/status/${escHtml(p.xPostId)}" target="_blank" rel="noopener">↗ View on X</a></div>` : ''}
-    </div>`).join('');
+    </div>`;
+      }).join('');
 
   const wipNote = wipCount > 0
     ? ` · <a href="https://github.com/josh-sea/garbage-time/tree/claude/garbage-time-agent-0a3Tg/workdir/drafts" target="_blank" rel="noopener">${wipCount} working draft${wipCount !== 1 ? 's' : ''} in repo</a>`
@@ -769,7 +793,23 @@ function buildPosts({ drafts, buildTime }) {
   </div>
   ${cards}`;
 
-  return page('Posts', 'posts', content, buildTime);
+  const script = `
+<script>
+(function(){
+  document.querySelectorAll('.post-copy-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var text = btn.dataset.copy;
+      navigator.clipboard.writeText(text).then(function(){
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(function(){ btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+      });
+    });
+  });
+})();
+</script>`;
+
+  return page('Posts', 'posts', content, buildTime, script);
 }
 
 // ── Notes page ────────────────────────────────────────────────────────────────

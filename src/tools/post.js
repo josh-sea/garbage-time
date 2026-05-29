@@ -26,14 +26,26 @@ function saveDraft(content, mediaPath, final) {
   };
 }
 
+// X wraps every http/https URL to exactly 23 chars via t.co
+function tweetLength(text) {
+  return text.replace(/https?:\/\/\S+/g, '12345678901234567890123').length;
+}
+
 export async function postToX(content, mediaPath, final = false) {
   const dryRun = process.env.DRY_RUN !== 'false';
 
-  if (content.length > 280) {
-    console.warn(`[post] Warning: content is ${content.length} chars (limit 280). Posting anyway.`);
+  const charCount = tweetLength(content);
+  if (charCount > 280) {
+    const overage = charCount - 280;
+    return {
+      error: `Tweet is ${charCount} chars over the 280-char limit by ${overage}. (URLs count as 23 chars each.) Shorten and retry.`,
+      char_count: charCount,
+      limit: 280,
+      overage,
+    };
   }
 
-  if (dryRun) return saveDraft(content, mediaPath, final);
+  if (dryRun) return { ...saveDraft(content, mediaPath, final), char_count: charCount };
 
   const { X_API_KEY, X_API_SECRET, X_ACCESS_TOKEN, X_ACCESS_SECRET } = process.env;
   if (!X_API_KEY || !X_API_SECRET || !X_ACCESS_TOKEN || !X_ACCESS_SECRET) {
