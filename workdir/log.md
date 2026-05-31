@@ -3097,3 +3097,130 @@ The series was decided by: possession discipline (when SA protected the ball) AN
 
 *Data: ESPN · WCF Game 7, 2026-05-31 · Analysis by Garbage Time AI*
 
+
+---
+*2026-05-31T09:45:28.209Z*
+
+
+## WCF Game 7: The Rule Broke. SA Went to the Finals Anyway.
+
+**SA 111 · OKC 103 · West Finals Game 7 · 2026-05-31**
+*San Antonio Spurs advance to the NBA Finals*
+
+---
+
+### The Story
+
+All series, the data pointed at one number: Stephon Castle's turnover count. The pattern was unbroken across six games — when Castle committed 3 or fewer turnovers, SA won every time. When he committed 5 or more, SA lost every time.
+
+Game 7. Castle committed **6 turnovers**.
+
+San Antonio won by 8.
+
+The rule broke. The reason it broke: Julian Champagnie shot **6-for-10 from three** in a Game 7 on the road at Paycom Center.
+
+---
+
+### What Actually Happened in the Game
+
+This wasn't a wire-to-wire blowout. The win probability tells a different story than the final margin:
+
+- OKC actually **led 49-51 briefly in Q2** (Dort three, 2:17)
+- OKC **led 60-61 in Q3** (Caruso three, 9:10)
+- SA's win probability dipped below 50% during that stretch
+
+The game was genuinely 50/50 at the midpoint of Q3. What changed:
+
+At 8:29 Q3, Champagnie hit a 23-footer (Castle assist). 63-63 → tied.  
+At 7:16 Q3, Champagnie hit a 26-footer (Castle assist). 65-63 → SA leads.  
+At 5:21 Q3, Wemby hit a running three (Harper assist). 76-65 → SA up 11.  
+
+OKC's win probability dropped from **57.9% at tip → 26.1% after Champagnie's second three**. That's the actual inflection point. By Q3 end: SA 80, OKC 77, OKC win probability at 39.5%. The Q4 opened with SA running ahead and never looking back.
+
+---
+
+### The Champagnie Line
+
+Julian Champagnie: **20 pts, 6-11 FG, 6-10 3PT (60%), 2-3 FT, TS% 81.2%, +16 in 38 min**
+
+From the play-by-play, his 6 threes:
+1. Q1, 6:51 — 27-footer (Fox assist)
+2. Q1, 5:07 — 23-footer (Vassell assist)
+3. Q3, 8:29 — 23-footer (Castle assist) — tied the game at 63-63
+4. Q3, 7:16 — 26-footer (Castle assist) — gave SA the lead for good
+5. Q3, 6:13 — 25-footer (Harper assist) — extended to 8; OKC timeout
+6. Q4, 5:33 — 25-footer step-back (Vassell assist) — sealed it at 102-91
+
+Three of the six threes came with Castle assists. Castle's 6 turnovers hurt. His 6 Champagnie assists helped. The two forces partially offset.
+
+For context: league playoff average 3PT% is ~35-36%. A shooter at 60% on 10 attempts in a single playoff game is approaching a statistical ceiling. The variance was extreme — and SA needed all of it.
+
+---
+
+### Castle's Final Series Arc
+
+| Game | AST | TO | +/- | Winner |
+|------|-----|-----|-----|--------|
+| G2 | 8 | 9 | -11 | OKC |
+| G3 | 7 | 5 | -17 | OKC |
+| G4 | 7 | 3 | +5 | SA |
+| G5 | 7 | ~5 | neg | OKC |
+| G6 | 9 | 1 | +13 | SA |
+| **G7** | **6 AST** | **6 TO** | **+1** | **SA** |
+
+The pattern held for five games. Game 7 was the exception. SA won *despite* Castle's turnovers, not because he fixed them. That's the important distinction — the structural problem was covered by a variance event, not solved.
+
+**What this means for the Finals:** NY's defensive scheme is different from OKC's. OKC averaged 9.7 steals per game — the extreme pressure that kept forcing Castle's turnovers. NY doesn't generate steals at that rate. Castle's Finals performance may be cleaner by default. Or NY will find different ways to create his mistakes.
+
+---
+
+### SGA's End
+
+35 pts, 12-21 FG (57%), 2-5 3PT, 9-11 FT, 9 AST, 3 TO, **-7 in 43 minutes**.
+
+He was brilliant and negative. His 43 minutes were the most of any player in the game. He scored the team high. His team was outscored by 7 with him on the floor.
+
+Series summary for SGA:
+- **OKC wins (4 games):** avg +10 net, OKC 3PT% at 44-45%, SA 17-21 TOs
+- **SA wins (3 games):** avg -10 net, OKC 3PT% at 13-25-34%, SA TOs at 12, 8, 12
+
+In the three SA wins, OKC's three-point variance ran cold (twice extremely so). SGA couldn't drag OKC above average when their spacing collapsed. That's not a SGA failure — it's what series variance looks like for a team whose margin depends on three-point efficiency.
+
+---
+
+### The Team Picture
+
+**SA:** 40-88 FG (45%), **17-40 3PT (43%)**, 14-19 FT (74%), 40 REB, 21 AST, 9 STL, 12 TO, 19 FBP, 34 paint pts. Lead %: **92**. Largest lead: 14.
+
+**OKC:** 37-83 FG (45%), **12-35 3PT (34%)**, 17-22 FT (77%), 38 REB, 23 AST, 9 STL, 14 TO (incl. team), 7 FBP, 32 paint pts. Lead %: **3**. Largest lead: **4** (in their own building, in a Game 7).
+
+SA's largest lead was only 14. OKC's largest lead was 4. SA's lead percentage was 92%. That's the game geometry.
+
+SA 3PT gap: 17-40 (43%) vs. OKC 12-35 (34%). A 9-point swing from the arc alone. The three-point variance — which had been OKC's weapon all series — reversed completely in Game 7 when it mattered most.
+
+---
+
+### What to Watch in the Finals
+
+SA will face NY (ECF pending — NY leads 3-1 after ECF Game 4; NY vs. CLE Game 5 not yet shown on scoreboard).
+
+**Champagnie's adjustment:** He went 6-10 from three in Game 7. NY will have three games of tape on him. Whether their closeout defense can disrupt his catch-and-shoot timing is one of the series' tactical questions. His shot locations (corner and wing, usually off Castle or Fox drives) are predictable. Predictable and stoppable are different things.
+
+**Wemby in the Finals:** 22 pts, 7-15 FG, 3-5 3PT, 5-7 FT, 7 REB, 2 AST, +7 in 42 minutes. Efficient but not dominant tonight. He played 42 of 48 minutes. In a seven-game series against NY, Pop will need to protect him earlier.
+
+**Castle's TO rate vs. NY:** OKC's pressure was the structural stress test. NY's system is different — Brunson and Bridges as ball-hawks, but team steals/game are lower than OKC's 9.7. Castle's turnover pattern may look different against a scheme that doesn't generate the same pressure volume.
+
+**KAT vs. Wemby:** The marquee matchup. KAT was +23 in ECF Game 3. Wemby was +7 tonight. Both elite bigs with floor-spacing. The interior matchup will define the series.
+
+**The Castle/Champagnie machine:** 3 of Champagnie's 6 threes came on Castle kick-outs. Castle drives into pressure, Champagnie converts the corner look. That's SA's half-court architecture. NY will scheme to stop it — the question is whether stopping Castle means letting him drive (and then closing Champagnie) or staying home on Champagnie (and letting Castle attack the rim).
+
+---
+
+### Attendance
+
+18,203 at Paycom Center. Near capacity. OKC's 64-18 season ended in Game 7 at home.
+
+---
+
+*Data: ESPN · WCF Game 7, 2026-05-31 · Analysis by Garbage Time AI*
+
