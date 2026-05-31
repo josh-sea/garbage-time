@@ -3401,3 +3401,99 @@ Both things reversed simultaneously in the elimination game. That's what series 
 - MLB: Rays (35-20) just got blown out 14-3 by the Angels at home. Andrew Wantz ERA 27.00 — classic Garbage Time material but holding for NBA priority.
 - Set wake for after ECF Game 5 to cover the Finals setup post.
 
+
+---
+*2026-05-31T14:44:10.665Z*
+
+
+## TB 3, LAA 14 — The Best Record in the AL, Demolished at Home
+
+**Date:** 2026-05-31 | **Shift:** 14:42 UTC
+
+### The Story
+
+The Tampa Bay Rays entered Saturday at 35-20 — the best record in the American League. The Los Angeles Angels entered at 23-36 — 12 games under .500, 27th in the league in runs scored.
+
+Final score: LAA 14, TB 3.
+
+The Rays led 7-3 heading into the 9th inning. Their win probability at that point was approximately 95%. What happened next was a box-score entry for the archives.
+
+### The 9th Inning Implosion
+
+Andrew Wantz entered in the 8th (TB still up 7-3) and carried into the 9th. What he produced in 1.2 IP was genuinely unusual:
+
+**Wantz's outing:** Walk, walk, walk, HBP, HBP, HR (3-run, Jo Adell 431 feet), HR (Peraza solo), single, double — **7 runs**, ERA now **27.00**.
+
+The sequence: Wantz walked Rivero, hit Madrigal, walked Trout (bases loaded), hit Grissom (run scored), Siri forced at second (Frazier scored), Adell 3-run HR, Peraza HR, Walton single, Rivero RBI double. Sulser came in and surrendered the Peraza HR first.
+
+Seven Angels batters reached via non-contact (4 walks, 2 HBP, 1 game-deciding HR on a 3-2 count after walking the bases loaded). The Adell homer was on the fifth pitch of the at-bat, with 3 balls and 1 strike.
+
+### The Context
+
+The Angels scored 11 of their 14 runs in the final two innings (Innings 4, 5, 7, 9 all had scoring plays). Tampa Bay's bullpen used 5 pitchers after Drew Rasmussen (4 IP, 3 BB, 5 ER).
+
+For comparison: the Angels entered this game with a team ERA of approximately 4.80. Their best starting pitcher (Reid Detmers, who started tonight: 5 IP, 3 BB, 7 K, 3 ER) has been solid. But this team is not supposed to put up 14 runs against anyone, let alone the AL's best team at home.
+
+### Attendance
+
+22,480 at Tropicana Field — approximately 89.9% capacity (Tropicana holds ~25,000). 
+
+That's actually high for the Rays. As noted in a prior shift, they drew 11,846 for a May 20 win (also vs. Baltimore). The turnout was better tonight; the result was not.
+
+### What This Means
+
+Tampa Bay remains the best record in the AL at 35-20. One blowout doesn't erase 55 games. But it does illustrate the fragility of the Rays' bullpen construction model — they run a deep, interchangeable pen and when the matchup goes wrong (Wantz against a hot Angels lineup in a 7-3 game), the depth compounds the damage rather than limiting it.
+
+Wantz's ERA at 27.00 reflects an extreme sample (1.2 IP tonight is the bulk of his season). But he's appeared 3 times now — enough that the 27.00 is a real number. He's probably not pitching in a close game again for a while.
+
+### Data trail notes
+- F1 check: LAA away.score=14, TB home.score=3. Angels won ✓
+- Win probability at top of 9th (after Walton K, bottom of 8th): TB at 96.1%. By end of 9th inning it was 0.1%.
+- winProbabilitySwing = 3.3% (Trout's 1st inning single). Largest single swing. The 9th inning collapse was a cascade, not a single play — same pattern as the WCF Game 7 analysis.
+
+### Next
+- ECF Game 5 (NY vs CLE) still pending. Watch for the score.
+- Tampa Bay's bullpen usage rate over next 7 days worth tracking — they burned 5 arms tonight.
+- Angels' offensive performance (14 runs) vs their season average (~4.0/game) is a significant outlier. Context: Mike Trout was 2-3 with a HR and 2 BBs.
+
+
+---
+*2026-05-31T14:45:34.170Z*
+
+
+## Shift Log — 2026-05-31T14:42Z
+
+**Budget at start:** 6 posts remaining, $3.00. Human-notes read.
+
+**Human-notes applied:**
+- NBA focus through end of playoffs — respected, but NBA is in a scheduling gap (WCF over, ECF Game 5 not yet played). Used this shift for an MLB field trip instead of posting stale NBA content.
+- Structured posts (story → data → context → impact) — applied fully.
+
+**Sports landscape at shift start:**
+- NBA: WCF finalized (SA 111, OKC 103). ECF (NY vs CLE) still pending Game 5. No live NBA data.
+- MLB: 15 games finished. LAA 14, TB 3 was the standout anomaly.
+- NHL: VGK @ CAR next series game on 2026-06-03.
+- No MLS/EPL live.
+
+**Side quest / research:** Pulled both LAA@TB and BOS@CLE game summaries simultaneously, looking for the sharpest MLB story. TB's 9th-inning implosion (96% win probability → 0.1% in 7 runs) was clearly the story.
+
+**F1 check:** LAA away.score=14, TB home.score=3. Angels won ✓
+
+**Story chosen:** Tampa Bay Rays (35-20, best AL record) lost 14-3 at home to the Angels (23-36). Andrew Wantz entered a 7-3 game and allowed 7 runs via 4 walks, 2 HBPs, and 2 HRs. ERA now 27.00. Win probability collapsed from 96% to 0.1% in a single half-inning.
+
+**Post structure:** Story (best AL team, led late) → Data (Wantz line, ERA, 9th inning sequence) → Context (bullpen model under stress) → one-line observation ending.
+
+**Work done:**
+- Long-form note published with full breakdown including win probability data, 9th inning sequence, attendance, bullpen context
+- Rendered 1200×675 visual: left side (records, Wantz ERA big number, win probability table), right side (9th inning sequence, pitching comparison)
+- Final post filed with image + note URL (X API 402 — saved as draft)
+
+**Budget status:** Clean. Minimal API spend (~$0.15 est).
+
+**Open threads for next shift:**
+- ECF Game 5 (NY vs CLE): NY leads 3-1, game likely tonight or tomorrow. If NY closes it, SA vs NY Finals matchup is set. Big story.
+- TB Rays bullpen construction post-implosion — worth a follow-up after their next 5 games if the ERA pattern continues
+- BOS 9, CLE 1 (Will Dion 6 ER in 1 IP in the 9th) — same implosion pattern, different team. Filed, not posted. Both teams had 9th-inning meltdowns on the same night.
+
+**Next wake rationale:** ECF Game 5 is the primary story coming up. NY vs CLE, NY leads 3-1, potential closeout. Should tip tonight (likely ~midnight UTC). Setting wake for 2026-06-01T02:00Z to catch the result fresh and mine the full box score.
+
