@@ -10,6 +10,8 @@ const promptsDir = path.join(repoRoot, 'src', 'prompts');
 
 // Prices per million tokens for claude-sonnet-4-6
 const PRICE_INPUT_PER_M = 3.0;
+const PRICE_CACHE_WRITE_PER_M = 3.75;  // 25% premium on cache write
+const PRICE_CACHE_READ_PER_M = 0.30;   // 90% discount on cache read
 const PRICE_OUTPUT_PER_M = 15.0;
 const MODEL = 'claude-sonnet-4-6';
 const MAX_ITERATIONS = 40;
@@ -29,7 +31,7 @@ export function loadEnv() {
   }
 }
 
-// Tool definitions for the Anthropic API
+// Tool definitions — cache_control on the last entry so all tool schemas are cached together
 const TOOL_DEFINITIONS = [
   {
     name: 'get_scoreboard',
@@ -151,6 +153,8 @@ const TOOL_DEFINITIONS = [
       },
       required: ['iso_datetime'],
     },
+    // Cache all tool definitions after this last one — same schemas every call
+    cache_control: { type: 'ephemeral' },
   },
 ];
 
@@ -227,11 +231,20 @@ Current time: ${new Date().toISOString()}`;
     console.log('[agent] Running regular shift.');
   }
 
-  const messages = [{ role: 'user', content: userPrompt }];
+  // Cache the initial user message — it's identical every iteration once the loop starts
+  const messages = [{
+    role: 'user',
+    content: [{ type: 'text', text: userPrompt, cache_control: { type: 'ephemeral' } }],
+  }];
   let totalInputTokens = 0;
   let totalOutputTokens = 0;
+  let totalCacheWriteTokens = 0;
+  let totalCacheReadTokens = 0;
   let iterations = 0;
   let detectedSport = null;
+
+  // System prompt as a cacheable content block (large, same on every call)
+  const systemBlock = [{ type: 'text', text: systemPrompt, cache_control: { type: 'ephemeral' } }];
 
   console.log(`[agent] Starting loop (max ${MAX_ITERATIONS} iterations)...`);
 
@@ -241,13 +254,15 @@ Current time: ${new Date().toISOString()}`;
     const response = await client.messages.create({
       model: MODEL,
       max_tokens: 4096,
-      system: systemPrompt,
+      system: systemBlock,
       messages,
       tools: TOOL_DEFINITIONS,
     });
 
     totalInputTokens += response.usage?.input_tokens ?? 0;
     totalOutputTokens += response.usage?.output_tokens ?? 0;
+    totalCacheWriteTokens += response.usage?.cache_creation_input_tokens ?? 0;
+    totalCacheReadTokens += response.usage?.cache_read_input_tokens ?? 0;
 
     const assistantMessage = { role: 'assistant', content: response.content };
     messages.push(assistantMessage);
@@ -294,7 +309,11 @@ Current time: ${new Date().toISOString()}`;
 
   // Record shift
   const endedAt = new Date().toISOString();
-  const estimatedCost = (totalInputTokens / 1e6) * PRICE_INPUT_PER_M + (totalOutputTokens / 1e6) * PRICE_OUTPUT_PER_M;
+  const estimatedCost =
+    (totalInputTokens / 1e6) * PRICE_INPUT_PER_M +
+    (totalCacheWriteTokens / 1e6) * PRICE_CACHE_WRITE_PER_M +
+    (totalCacheReadTokens / 1e6) * PRICE_CACHE_READ_PER_M +
+    (totalOutputTokens / 1e6) * PRICE_OUTPUT_PER_M;
 
   const { recordShift } = await import('./tools/budget.js');
   recordShift({
@@ -304,17 +323,22 @@ Current time: ${new Date().toISOString()}`;
     iterations,
     inputTokens: totalInputTokens,
     outputTokens: totalOutputTokens,
+    cacheWriteTokens: totalCacheWriteTokens,
+    cacheReadTokens: totalCacheReadTokens,
     estimatedCostUsd: estimatedCost,
     notes: isDayOne ? 'day-one' : null,
   });
 
-  console.log(`[agent] Shift recorded. Tokens: ${totalInputTokens}in/${totalOutputTokens}out. Est. cost: $${estimatedCost.toFixed(4)}`);
+  const cacheHitRate = totalCacheWriteTokens + totalCacheReadTokens > 0
+    ? Math.round(totalCacheReadTokens / (totalCacheWriteTokens + totalCacheReadTokens) * 100)
+    : 0;
+  console.log(`[agent] Shift recorded. Tokens: ${totalInputTokens}in/${totalOutputTokens}out | cache: ${totalCacheWriteTokens}w/${totalCacheReadTokens}r (${cacheHitRate}% hit rate). Est. cost: $${estimatedCost.toFixed(4)}`);
 
   // Save full trace
   if (!existsSync(shiftsDir)) mkdirSync(shiftsDir, { recursive: true });
   const traceTs = startedAt.replace(/[:.]/g, '-').slice(0, 19);
   const tracePath = path.join(shiftsDir, `${traceTs}.json`);
-  writeFileSync(tracePath, JSON.stringify({ startedAt, endedAt, iterations, totalInputTokens, totalOutputTokens, estimatedCost, messages }, null, 2), 'utf8');
+  writeFileSync(tracePath, JSON.stringify({ startedAt, endedAt, iterations, totalInputTokens, totalOutputTokens, totalCacheWriteTokens, totalCacheReadTokens, estimatedCost, messages }, null, 2), 'utf8');
   console.log(`[agent] Trace saved: ${path.relative(repoRoot, tracePath)}`);
 
   return { startedAt, endedAt, iterations, totalInputTokens, totalOutputTokens, estimatedCost };
